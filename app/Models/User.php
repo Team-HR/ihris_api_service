@@ -40,8 +40,20 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    protected $appends = [
+        'employee_information'
+    ];
+
+
+    public function getEmployeeInformationAttribute()
+    {
+        if (!$this->employees_id) return null;
+        return SysEmployee::find($this->employees_id);
     }
 }
