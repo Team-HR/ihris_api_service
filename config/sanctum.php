@@ -12,13 +12,14 @@ return [
     | Requests from the following domains / hosts will receive stateful API
     | authentication cookies. Typically, these should include your local
     | and production domains which access your API via a frontend SPA.
-        - to prevent unauthorized error on authed app, include app addresses
+        - to prevent unauthorized error on authed app, include app addresses:port
+        - make sure port the included port is the same from frontend SPA
     |
     */
 
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
         '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,192.168.50.51:5173',
+        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,192.168.50.51:5174',
         Sanctum::currentApplicationUrlWithPort()
     ))),
 
