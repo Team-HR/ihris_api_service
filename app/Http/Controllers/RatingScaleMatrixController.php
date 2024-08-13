@@ -11,14 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class RatingScaleMatrixController extends Controller
 {
-    /**
-     * Get RSM rows.
-     * parameters period_id
-     * @var integer
-     */
 
-    public function getRatingScaleMatrix(Request $request)
+    /**
+     * 
+     *  Get RSM Title
+     *  and Period
+     * 
+     * */
+
+    public function getRatingScaleMatrixTitle(Request $request)
     {
+
+
         $user = Auth::user();
         $employee_id = $user->employees_id;
 
@@ -41,17 +45,82 @@ class RatingScaleMatrixController extends Controller
             $department = $user->employee_information->department;
         }
 
-
-
         return [
-            // 'pcrStatus' =>  $pcrStatus,
-            // 'user' => $user->employee_information,
-            'rows' => getRows($period_id, $department->department_id),
-            'employee_id' => $employee_id,
             'department' => $department,
             'period_id' => $period->mfoperiod_id,
             'period' => $period->month_mfo,
             'year' => $period->year_mfo
+        ];
+    }
+
+
+
+    /**
+     * 
+     * Get Cascaded MFOs list
+     * for changing mfo parent
+     * 
+     * */
+    public function getRatingScaleMatrixMfos(Request $request)
+    {
+        $cf_ID = $request->cf_ID;
+        $period_id = $request->period_id;
+
+        $user = Auth::user();
+        $employee_id = $user->employees_id;
+
+        /**
+         * department_id from spms_performancereviewstatus table
+         * if no spms_performancereviewstatus, 
+         * current user employee's department_id from
+         * employees table is used
+         */
+
+        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+        if ($pcrStatus) {
+            $department = $pcrStatus->department;
+        } else {
+            $department = $user->employee_information->department;
+        }
+
+        return [
+            'rows' => getRows($period_id, $department->department_id),
+        ];
+    }
+
+
+    /**
+     * Get RSM rows.
+     * parameters period_id
+     * @var integer
+     */
+
+    public function getRatingScaleMatrix(Request $request)
+    {
+        $user = Auth::user();
+        $employee_id = $user->employees_id;
+
+        $period_id = $request->period_id;
+
+        /**
+         * department_id from spms_performancereviewstatus table
+         * if no spms_performancereviewstatus, 
+         * current user employee's department_id from
+         * employees table is used
+         */
+
+        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+
+        if ($pcrStatus) {
+            $department = $pcrStatus->department;
+        } else {
+            $department = $user->employee_information->department;
+        }
+
+        return [
+            'rows' => getRows($period_id, $department->department_id),
         ];
     }
 }
