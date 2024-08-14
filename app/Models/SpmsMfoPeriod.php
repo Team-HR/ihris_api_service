@@ -23,4 +23,7 @@ class SpmsMfoPeriod extends Model
      * @var string
      */
     protected $primaryKey = 'mfoperiod_id';
+
+    // Disable timestamps
+    public $timestamps = false;
 }

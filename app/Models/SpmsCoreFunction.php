@@ -23,4 +23,6 @@ class SpmsCoreFunction extends Model
      */
     protected $primaryKey = 'cf_ID';
 
+    // Disable timestamps
+    public $timestamps = false;
 }

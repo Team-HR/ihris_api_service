@@ -23,4 +23,7 @@ class SysDepartment extends Model
      * @var string
      */
     protected $primaryKey = 'department_id';
+
+    // Disable timestamps
+    public $timestamps = false;
 }

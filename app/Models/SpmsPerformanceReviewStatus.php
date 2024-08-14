@@ -26,6 +26,9 @@ class SpmsPerformanceReviewStatus extends Model
     protected $primaryKey = 'performanceReviewStatus_id';
 
 
+    // Disable timestamps
+    public $timestamps = false;
+    
 
     protected $appends = [
         'department',

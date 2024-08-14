@@ -25,6 +25,9 @@ class SpmsSuccessIndicator extends Model
     protected $primaryKey = 'mi_id';
 
 
+    // Disable timestamps
+    public $timestamps = false;
+
     protected $appends = [
         'quality',
         'effeciency',

@@ -12,6 +12,66 @@ use Illuminate\Support\Facades\Auth;
 class RatingScaleMatrixController extends Controller
 {
 
+    public function deleteMfo($cf_ID)
+    {
+        $mfo = SpmsCoreFunction::find($cf_ID);
+        if ($mfo->delete()) {
+            // Return a success response
+            return response()->json(['message' => 'Record deleted successfully!', 'data' => $mfo], 201);
+        } else {
+            // Return a failure response if save() returns false (uncommon)
+            return response()->json(['message' => 'Failed to delete record.'], 500);
+        }
+    }
+
+    public function addNewMfo(Request $request)
+    {
+        // $mfo = new SpmsCoreFunction();
+        // {"newMfo":{"period_id":"18","cf_count":"x","cf_title":"xsasd"}}
+        $period_id = $request['newMfo']['period_id'];
+        $cf_count = $request['newMfo']['cf_count'];
+        $cf_title = $request['newMfo']['cf_title'];
+
+        $user = Auth::user();
+        $employee_id = $user->employees_id;
+
+        /**
+         * department_id from spms_performancereviewstatus table
+         * if no spms_performancereviewstatus, 
+         * current user employee's department_id from
+         * employees table is used
+         */
+
+        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+        if ($pcrStatus) {
+            $department_id = $pcrStatus->department_id;
+        } else {
+            $department_id = $user->employee_information->department_id;
+        }
+
+
+        $mfo = new SpmsCoreFunction();
+
+        $mfo->mfo_periodId = $period_id;
+        $mfo->parent_id = "";
+        $mfo->dep_id = $department_id;
+        $mfo->cf_count = $cf_count;
+        $mfo->cf_title = $cf_title;
+        $mfo->corrections = "";
+
+        // Attempt to save the model
+        if ($mfo->save()) {
+            // Return a success response
+            return response()->json(['message' => 'Record added successfully!', 'data' => $mfo], 201);
+        } else {
+            // Return a failure response if save() returns false (uncommon)
+            return response()->json(['message' => 'Failed to save record.'], 500);
+        }
+        // return  $request->all();
+    }
+
+
     /**
      * 
      *  Get RSM Title
@@ -19,14 +79,13 @@ class RatingScaleMatrixController extends Controller
      * 
      * */
 
-    public function getRatingScaleMatrixTitle(Request $request)
+    public function getRatingScaleMatrixTitle($period_id)
     {
 
 
         $user = Auth::user();
         $employee_id = $user->employees_id;
 
-        $period_id = $request->period_id;
         $period = SpmsMfoPeriod::find($period_id);
 
         /**
@@ -53,17 +112,16 @@ class RatingScaleMatrixController extends Controller
         ];
     }
 
-
-
     /**
      * 
      * Get Cascaded MFOs list
      * for changing mfo parent
      * 
      * */
-    public function getRatingScaleMatrixMfos(Request $request)
+    public function getRatingScaleMatrixMfosOnly(Request $request)
     {
         $cf_ID = $request->cf_ID;
+        $parent_id = $request->parent_id;
         $period_id = $request->period_id;
 
         $user = Auth::user();
@@ -77,6 +135,40 @@ class RatingScaleMatrixController extends Controller
          */
 
         $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+        if ($pcrStatus) {
+            $department = $pcrStatus->department;
+        } else {
+            $department = $user->employee_information->department;
+        }
+
+        return [
+            'rows' => getRowsMfosOnly($period_id, $department->department_id, $cf_ID, $parent_id),
+        ];
+    }
+
+    /**
+     * Get RSM rows.
+     * parameters period_id
+     * @var integer
+     */
+
+    public function getRatingScaleMatrix($period_id)
+    {
+        $user = Auth::user();
+        $employee_id = $user->employees_id;
+
+        // $period_id = $request->period_id;
+
+        /**
+         * department_id from spms_performancereviewstatus table
+         * if no spms_performancereviewstatus, 
+         * current user employee's department_id from
+         * employees table is used
+         */
+
+        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
 
         if ($pcrStatus) {
             $department = $pcrStatus->department;
@@ -91,37 +183,29 @@ class RatingScaleMatrixController extends Controller
 
 
     /**
-     * Get RSM rows.
-     * parameters period_id
-     * @var integer
-     */
+     * 
+     *  Move MFO to 
+     *  new parent MFO
+     * 
+     * */
 
-    public function getRatingScaleMatrix(Request $request)
+    public function moveMfoToNewParent(Request $request)
     {
-        $user = Auth::user();
-        $employee_id = $user->employees_id;
+        $cf_ID = $request->cf_ID;
+        $new_parent_id = $request->new_parent_id;
 
-        $period_id = $request->period_id;
+        $mfo = SpmsCoreFunction::find($cf_ID);
+        $mfo->parent_id = $new_parent_id;
+        $mfo->save();
 
-        /**
-         * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
-         * current user employee's department_id from
-         * employees table is used
-         */
-
-        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
-
-
-        if ($pcrStatus) {
-            $department = $pcrStatus->department;
+        // Attempt to save the model
+        if ($mfo->save()) {
+            // Return a success response
+            return response()->json(['message' => 'Record saved successfully!', 'data' => $mfo], 201);
         } else {
-            $department = $user->employee_information->department;
+            // Return a failure response if save() returns false (uncommon)
+            return response()->json(['message' => 'Failed to save record.'], 500);
         }
-
-        return [
-            'rows' => getRows($period_id, $department->department_id),
-        ];
     }
 }
 
@@ -188,6 +272,45 @@ function getChildren(&$rows, $parent_id, $indent)
         //     }
         // }
         $rows = getChildren($rows, $child->cf_ID, $indent);
+    }
+    return $rows;
+}
+
+/**
+ * getMfos only
+ * no success indicators
+ * for mfo parent reassigning
+ * */
+
+function getRowsMfosOnly($period_id, $department_id, $cf_ID)
+{
+    $topMfos = SpmsCoreFunction::where('parent_id', '')->where('mfo_periodId', $period_id)->where('dep_id', $department_id)->orderBy('cf_count')->get();
+    $rows = [];
+
+    foreach ($topMfos as $key => $topMfo) {
+        $indent = 0;
+        $topMfo['indent'] = $indent;
+        $isDisabled = false;
+        $isDisabled = $topMfo->cf_ID ==  $cf_ID  ? true : false;
+        $topMfo['isDisabled'] = $isDisabled;
+        $rows[] = $topMfo;
+        $rows = getChildrenMfosOnly($rows, $topMfo->cf_ID, $indent, $isDisabled, $cf_ID);
+    }
+
+    return $rows;
+}
+
+function getChildrenMfosOnly(&$rows, $parent_id, $indent, $isDisabled, $cf_ID)
+{
+    $indent += 1;
+    $children = SpmsCoreFunction::where('parent_id', $parent_id)->orderBy('cf_count')->get();
+    foreach ($children as $key => $child) {
+        $child['indent'] = $indent;
+        $isDisabled = false;
+        $isDisabled = $child->cf_ID ==  $cf_ID || $child->parent_id == $cf_ID ? true : false;
+        $child['isDisabled'] = $isDisabled;
+        $rows[] = $child;
+        $rows = getChildrenMfosOnly($rows, $child->cf_ID, $indent,  $isDisabled, $cf_ID);
     }
     return $rows;
 }

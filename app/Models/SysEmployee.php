@@ -21,6 +21,8 @@ class SysEmployee extends Model
      */
     protected $primaryKey = 'employees_id';
 
+    // Disable timestamps
+    public $timestamps = false;
 
     protected $appends = [
         'full_name',
