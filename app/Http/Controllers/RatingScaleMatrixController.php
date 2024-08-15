@@ -24,6 +24,33 @@ class RatingScaleMatrixController extends Controller
         }
     }
 
+    public function addNewSubMfo(Request $request)
+    {
+        $mfo_periodId = $request->period_id;
+        $parent_id = $request->parent_id;
+        $dep_id = getAuthPersonnelDepartmentId($mfo_periodId);
+        $cf_count = $request->cf_count;
+        $cf_title = $request->cf_title;
+
+        $mfo = new SpmsCoreFunction();
+
+        $mfo->mfo_periodId = $mfo_periodId;
+        $mfo->parent_id = $parent_id;
+        $mfo->dep_id = $dep_id;
+        $mfo->cf_count = $cf_count;
+        $mfo->cf_title = $cf_title;
+        $mfo->corrections = "";
+
+        if ($mfo->save()) {
+            // Return a success response
+            return response()->json(['message' => 'Record added successfully!', 'data' => $mfo], 201);
+        } else {
+            // Return a failure response if save() returns false (uncommon)
+            return response()->json(['message' => 'Failed to add record.'], 500);
+        }
+    }
+
+
     public function addNewMfo(Request $request)
     {
         // $mfo = new SpmsCoreFunction();
@@ -333,4 +360,28 @@ function getChildrenMfosOnly(&$rows, $parent_id, $indent, $isDisabled, $cf_ID)
         $rows = getChildrenMfosOnly($rows, $child->cf_ID, $indent,  $isDisabled, $cf_ID);
     }
     return $rows;
+}
+
+
+function getAuthPersonnelDepartmentId($period_id)
+{
+    $user = Auth::user();
+    $employee_id = $user->employees_id;
+
+    /**
+     * department_id from spms_performancereviewstatus table
+     * if no spms_performancereviewstatus, 
+     * current user employee's department_id from
+     * employees table is used
+     */
+
+    $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+    if ($pcrStatus) {
+        $department_id = $pcrStatus->department_id;
+    } else {
+        $department_id = $user->employee_information->department_id;
+    }
+
+    return $department_id;
 }

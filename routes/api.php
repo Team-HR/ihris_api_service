@@ -10,26 +10,26 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-
 /**
  * 
  * PMS
  * 
  * */
 
-Route::post('/getPeriodId', function (Request $request) {
-    $selectedPeriod =  $request->selectedPeriod;
-    $selectedYear =  $request->selectedYear;
-    $period = SpmsMfoPeriod::where('month_mfo', $selectedPeriod)->where('year_mfo', $selectedYear)->first();
-    return $period ? $period->mfoperiod_id : null;
-})->middleware('auth:sanctum');
-
-Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle'])->middleware('auth:sanctum');
-Route::get('/rsm/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrix'])->middleware('auth:sanctum');
-Route::post('/mfo', [RatingScaleMatrixController::class, 'addNewMfo'])->middleware('auth:sanctum');
-Route::patch('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'updateMfo'])->middleware('auth:sanctum');
-Route::delete('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'deleteMfo'])->middleware('auth:sanctum');
-Route::post('/getRsmMfos', [RatingScaleMatrixController::class, 'getRatingScaleMatrixMfosOnly'])->middleware('auth:sanctum');
-Route::post('/moveMfoToNewParent', [RatingScaleMatrixController::class, 'moveMfoToNewParent'])->middleware('auth:sanctum');
-Route::delete('/si/{id}', [SuccessIndicatorController::class, 'deleteSuccessIndicator'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/getPeriodId', function (Request $request) {
+        $selectedPeriod =  $request->selectedPeriod;
+        $selectedYear =  $request->selectedYear;
+        $period = SpmsMfoPeriod::where('month_mfo', $selectedPeriod)->where('year_mfo', $selectedYear)->first();
+        return $period ? $period->mfoperiod_id : null;
+    });
+    Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle']);
+    Route::get('/rsm/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrix']);
+    Route::post('/mfo', [RatingScaleMatrixController::class, 'addNewMfo']);
+    Route::post('/mfo/sub', [RatingScaleMatrixController::class, 'addNewSubMfo']);
+    Route::patch('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'updateMfo']);
+    Route::delete('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'deleteMfo']);
+    Route::post('/getRsmMfos', [RatingScaleMatrixController::class, 'getRatingScaleMatrixMfosOnly']);
+    Route::post('/moveMfoToNewParent', [RatingScaleMatrixController::class, 'moveMfoToNewParent']);
+    Route::delete('/si/{id}', [SuccessIndicatorController::class, 'deleteSuccessIndicator']);
+});
