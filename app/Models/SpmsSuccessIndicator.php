@@ -43,10 +43,12 @@ class SpmsSuccessIndicator extends Model
 
         foreach ($incharges as $employee_id) {
             $employee = SysEmployee::find($employee_id);
-            // $personnel[] = [
-            //     'employee_id' => $employee->employees_id,
-            //     'full_name' => $employee->full_name
-            // ];
+            if ($employee) {
+                $personnel[] = [
+                    'employee_id' => $employee->employees_id,
+                    'full_name' => $employee->full_name
+                ];
+            }
         }
         return $personnel;
     }

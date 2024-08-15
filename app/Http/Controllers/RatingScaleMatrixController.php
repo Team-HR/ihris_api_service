@@ -74,6 +74,26 @@ class RatingScaleMatrixController extends Controller
 
     /**
      * 
+     * update MFO title and/or cf_count
+     * 
+     */
+    public function updateMfo(Request $request, $cf_ID)
+    {
+        $mfo = SpmsCoreFunction::find($cf_ID);
+        $mfo->cf_count = $request->cf_count;
+        $mfo->cf_title = $request->cf_title;
+        if ($mfo->save()) {
+            // Return a success response
+            return response()->json(['message' => 'Record updated successfully!', 'data' => $mfo], 201);
+        } else {
+            // Return a failure response if save() returns false (uncommon)
+            return response()->json(['message' => 'Failed to update record.'], 500);
+        }
+    }
+
+
+    /**
+     * 
      *  Get RSM Title
      *  and Period
      * 
@@ -201,10 +221,10 @@ class RatingScaleMatrixController extends Controller
         // Attempt to save the model
         if ($mfo->save()) {
             // Return a success response
-            return response()->json(['message' => 'Record saved successfully!', 'data' => $mfo], 201);
+            return response()->json(['message' => 'Record moved successfully!', 'data' => $mfo], 201);
         } else {
             // Return a failure response if save() returns false (uncommon)
-            return response()->json(['message' => 'Failed to save record.'], 500);
+            return response()->json(['message' => 'Failed to move record.'], 500);
         }
     }
 }

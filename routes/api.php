@@ -28,6 +28,7 @@ Route::post('/getPeriodId', function (Request $request) {
 Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle'])->middleware('auth:sanctum');
 Route::get('/rsm/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrix'])->middleware('auth:sanctum');
 Route::post('/mfo', [RatingScaleMatrixController::class, 'addNewMfo'])->middleware('auth:sanctum');
+Route::patch('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'updateMfo'])->middleware('auth:sanctum');
 Route::delete('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'deleteMfo'])->middleware('auth:sanctum');
 Route::post('/getRsmMfos', [RatingScaleMatrixController::class, 'getRatingScaleMatrixMfosOnly'])->middleware('auth:sanctum');
 Route::post('/moveMfoToNewParent', [RatingScaleMatrixController::class, 'moveMfoToNewParent'])->middleware('auth:sanctum');
