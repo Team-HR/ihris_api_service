@@ -57,21 +57,48 @@ class SpmsSuccessIndicator extends Model
     {
         if (!isset($this->mi_quality)) return null;
         $quality = unserialize($this->mi_quality);
-        return checkIfNotEmpty($quality) ? $quality : null;
+        if (checkIfNotEmpty($quality)) {
+            $flipped_arr = [];
+            $lenght = count($quality);
+            for ($i = 0; $i < $lenght; $i++) {
+                $flipped_arr[] = $quality[($lenght - $i) - 1];
+            }
+            return $flipped_arr;
+        }
+        return null;
     }
 
     public function getEffeciencyAttribute()
     {
         if (!isset($this->mi_eff)) return null;
         $efficiency = unserialize($this->mi_eff);
-        return checkIfNotEmpty($efficiency) ? $efficiency : null;
+        // return checkIfNotEmpty($efficiency) ? $efficiency : null;
+
+        if (checkIfNotEmpty($efficiency)) {
+            $flipped_arr = [];
+            $lenght = count($efficiency);
+            for ($i = 0; $i < $lenght; $i++) {
+                $flipped_arr[] = $efficiency[($lenght - $i) - 1];
+            }
+            return $flipped_arr;
+        }
+        return null;
     }
 
     public function getTimelinessAttribute()
     {
         if (!isset($this->mi_time)) return null;
         $timeliness = unserialize($this->mi_time);
-        return checkIfNotEmpty($timeliness) ? $timeliness : null;
+        // return checkIfNotEmpty($timeliness) ? $timeliness : null;
+        if (checkIfNotEmpty($timeliness)) {
+            $flipped_arr = [];
+            $lenght = count($timeliness);
+            for ($i = 0; $i < $lenght; $i++) {
+                $flipped_arr[] = $timeliness[($lenght - $i) - 1];
+            }
+            return $flipped_arr;
+        }
+        return null;
     }
 }
 

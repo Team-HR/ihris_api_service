@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RatingScaleMatrixController;
 use App\Http\Controllers\SuccessIndicatorController;
+use App\Http\Controllers\SysEmployeeController;
 use App\Models\SpmsMfoPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +10,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+
+/**
+ * 
+ * Generic APIs
+ * 
+ * */
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/getAllEmployees', [SysEmployeeController::class, 'getAllEmployees']);
+});
+
 
 /**
  * 
