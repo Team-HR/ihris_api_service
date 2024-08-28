@@ -1,5 +1,6 @@
 services:
     laravel.test:
+        container_name: '${CONTAINER_API_NAME:-ihris_api}'
         build:
             context: ./vendor/laravel/sail/runtimes/8.3
             dockerfile: Dockerfile
@@ -9,8 +10,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '89:80'
-            # - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '${API_PORT:-89}:80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -25,9 +25,10 @@ services:
             - redis
     
     redis:
+        container_name: '${CONTAINER_REDIS_NAME:-ihris_redis}'
         image: 'redis:alpine'
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+            - '${REDIS_PORT:-6379}:6379'
         volumes:
             - 'sail-redis:/data'
         networks:
