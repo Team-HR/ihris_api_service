@@ -20,12 +20,12 @@ class SysEmployeeController extends Controller
 
         foreach ($employees as $key => $emp) {
             $data[] = [
-                "name" => $emp["full_name"],
-                "code" => $emp["employees_id"],
+                "employee_id" => $emp["employees_id"],
+                "full_name" => $emp["full_name"]
             ];
         }
 
-        usort($data, fn($a, $b) => strcmp($a["name"], $b["name"]));
+        usort($data, fn($a, $b) => strcmp($a["full_name"], $b["full_name"]));
 
         return $data;
     }
