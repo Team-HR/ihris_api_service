@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    
+
     /**
      * Handle an authentication attempt.
      */
@@ -30,7 +30,7 @@ class AuthController extends Controller
             // return "login success!";
         }
 
-        return response(["message" => "The provided credentials do not match our records."], 401) ;
+        return response(["message" => "The provided credentials do not match our records."], 401);
         // return back()->withErrors([
         //     'email' => 'The provided credentials do not match our records.',
         // ])->onlyInput('email');

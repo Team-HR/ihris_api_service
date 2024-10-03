@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\LeaveApplicationController;
 use App\Http\Controllers\RatingScaleMatrixController;
 use App\Http\Controllers\SuccessIndicatorController;
 use App\Http\Controllers\SysEmployeeController;
 use App\Models\SpmsMfoPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
