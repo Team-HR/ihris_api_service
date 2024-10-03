@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\SysEmployee;
+use App\Models\UserLeaveApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class LeaveApplicationController extends Controller
 {
@@ -37,5 +40,41 @@ class LeaveApplicationController extends Controller
             ->get();
 
         return response()->json($employees);
+    }
+
+    /**
+     * 
+     * creates/adds leave application to database
+     * 
+     * 
+     *  */
+
+    public function createLeaveApplication(Request $request)
+    {
+        $validatedData = $request->validate([
+            'employees_id' => 'required|integer', // Assuming users table
+            'leave_type' => 'required|string',
+            'date_of_filing' => 'required|date',
+            'leave_dates' => 'required|array', // Assuming it will be an array
+            'leave_dates.*' => 'date', // Each date in the array should be a valid date
+            'remarks' => 'nullable|string',
+        ]);
+
+        // Convert date_of_filing to a Carbon instance and format it
+        $dateOfFiling = Carbon::parse($validatedData['date_of_filing'])->format('Y-m-d H:i:s');
+
+        $user = Auth::user();
+        $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
+
+        $createdData = UserLeaveApplication::create([
+            'employees_id' => $validatedData['employees_id'],
+            'leave_type' => $validatedData['leave_type'],
+            'date_of_filing' => $dateOfFiling,
+            'leave_dates' => json_encode($validatedData['leave_dates']),
+            'status' => $status,
+            'remarks' => $validatedData['remarks'],
+        ]);
+
+        return response()->json($createdData);
     }
 }
