@@ -17,11 +17,22 @@ class LeaveApplicationController extends Controller
     {
         $name = $request->query('name');
 
+        if (empty($name)) {
+            return response()->json([]);
+        }
+
+        // Split the name into parts
+        $nameParts = explode(' ', $name);
+
         $employees = SysEmployee::where('status', 'ACTIVE')
-            ->where(function ($query) use ($name) {
-                $query->where('firstName', 'LIKE', '%' . $name . '%')
-                    ->orWhere('lastName', 'LIKE', '%' . $name . '%')
-                    ->orWhere('middleName', 'LIKE', '%' . $name . '%');
+            ->where(function ($query) use ($nameParts) {
+                foreach ($nameParts as $part) {
+                    $query->where(function ($q) use ($part) {
+                        $q->where('firstName', 'LIKE', '%' . $part . '%')
+                            ->orWhere('lastName', 'LIKE', '%' . $part . '%')
+                            ->orWhere('middleName', 'LIKE', '%' . $part . '%');
+                    });
+                }
             })
             ->get();
 
