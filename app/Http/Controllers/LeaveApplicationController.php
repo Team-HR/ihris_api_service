@@ -87,4 +87,34 @@ class LeaveApplicationController extends Controller
 
         return response()->json($allData);
     }
+
+
+    /**
+     * 
+     * updates leave applications with {id} 
+     * updates status of leave applications approved/rejected
+     * 
+     *  */
+    public function updateLeaveApplication(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:approved,rejected,pending', // Adjust statuses as needed
+            'id' => 'required|int'
+        ]);
+
+        // Find the leave application by ID
+        $leaveApplication = UserLeaveApplication::find($validatedData['id']);
+
+        // Check if the application exists
+        if (!$leaveApplication) {
+            return response()->json(['message' => 'Leave application not found'], 404);
+        }
+
+        // Update the status
+        $leaveApplication->status = $validatedData['status'];
+        $leaveApplication->save();
+
+        return response()->json($leaveApplication, 200);
+    }
 }
