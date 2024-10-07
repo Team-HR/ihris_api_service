@@ -6,7 +6,6 @@ use App\Models\SysEmployee;
 use App\Models\UserLeaveApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class LeaveApplicationController extends Controller
 {
@@ -60,21 +59,32 @@ class LeaveApplicationController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
-        // Convert date_of_filing to a Carbon instance and format it
-        $dateOfFiling = Carbon::parse($validatedData['date_of_filing'])->format('Y-m-d H:i:s');
-
         $user = Auth::user();
         $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
 
         $createdData = UserLeaveApplication::create([
             'employees_id' => $validatedData['employees_id'],
             'leave_type' => $validatedData['leave_type'],
-            'date_of_filing' => $dateOfFiling,
+            'date_of_filing' => $validatedData['date_of_filing'],
             'leave_dates' => json_encode($validatedData['leave_dates']),
             'status' => $status,
             'remarks' => $validatedData['remarks'],
         ]);
 
         return response()->json($createdData);
+    }
+
+
+    /**
+     * 
+     * Fetches all leave applications from database
+     * 
+     * 
+     *  */
+    public function fetchAllLeaveApplications()
+    {
+        $allData = UserLeaveApplication::orderBy('created_at', 'desc')->get();
+
+        return response()->json($allData);
     }
 }
