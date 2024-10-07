@@ -29,8 +29,11 @@ class SpmsSuccessIndicator extends Model
     public $timestamps = false;
 
     protected $appends = [
+        'has_quality',
         'quality',
-        'effeciency',
+        'has_efficiency',
+        'efficiency',
+        'has_timeliness',
         'timeliness',
         'personnel'
     ];
@@ -53,6 +56,14 @@ class SpmsSuccessIndicator extends Model
         return $personnel;
     }
 
+    public function getHasQualityAttribute()
+    {
+        if (!isset($this->mi_quality)) return false;
+        $quality = unserialize($this->mi_quality);
+        return checkIfNotEmpty($quality);
+    }
+
+
     public function getQualityAttribute()
     {
         if (!isset($this->mi_quality)) return null;
@@ -68,7 +79,15 @@ class SpmsSuccessIndicator extends Model
         return null;
     }
 
-    public function getEffeciencyAttribute()
+    public function getHasEfficiencyAttribute()
+    {
+        if (!isset($this->mi_eff)) return false;
+        $efficiency = unserialize($this->mi_eff);
+        return checkIfNotEmpty($efficiency);
+    }
+
+
+    public function getEfficiencyAttribute()
     {
         if (!isset($this->mi_eff)) return null;
         $efficiency = unserialize($this->mi_eff);
@@ -83,6 +102,14 @@ class SpmsSuccessIndicator extends Model
             return $flipped_arr;
         }
         return null;
+    }
+
+
+    public function getHasTimelinessAttribute()
+    {
+        if (!isset($this->mi_time)) return false;
+        $timeliness = unserialize($this->mi_time);
+        return checkIfNotEmpty($timeliness);
     }
 
     public function getTimelinessAttribute()
