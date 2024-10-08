@@ -56,7 +56,13 @@ class LeaveApplicationController extends Controller
             'date_of_filing' => 'required|date',
             'leave_dates' => 'required|array', // Assuming it will be an array
             'leave_dates.*' => 'date', // Each date in the array should be a valid date
-            'remarks' => 'nullable|string',
+            'specified_remark' => 'nullable|string',
+            'within_philippines' => 'nullable|boolean',
+            'abroad' => 'nullable|boolean',
+            'in_hospital' => 'nullable|boolean',
+            'out_patient' => 'nullable|boolean',
+            'completion_of_masters_degree' => 'nullable|boolean',
+            'bar_or_board_examination_review' => 'nullable|boolean',
         ]);
 
         $user = Auth::user();
@@ -68,7 +74,13 @@ class LeaveApplicationController extends Controller
             'date_of_filing' => $validatedData['date_of_filing'],
             'leave_dates' => json_encode($validatedData['leave_dates']),
             'status' => $status,
-            'remarks' => $validatedData['remarks'],
+            'specified_remark' => $validatedData['specified_remark'],
+            'within_philippines' => $validatedData['within_philippines'],
+            'abroad' => $validatedData['abroad'],
+            'in_hospital' => $validatedData['in_hospital'],
+            'out_patient' => $validatedData['out_patient'],
+            'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
+            'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
 
         return response()->json($createdData);

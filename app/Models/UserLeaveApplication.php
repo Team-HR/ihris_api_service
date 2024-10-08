@@ -12,8 +12,14 @@ class UserLeaveApplication extends Model
         'leave_type',
         'date_of_filing',
         'leave_dates',
-        'remarks',
         'status',
+        'specified_remark',
+        'within_philippines',
+        'abroad',
+        'in_hospital',
+        'out_patient',
+        'completion_of_masters_degree',
+        'bar_or_board_examination_review',
     ];
 
     protected $appends = [
