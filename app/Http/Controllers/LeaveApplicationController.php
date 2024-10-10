@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SysEmployee;
+use App\Models\User;
 use App\Models\UserLeaveApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -128,5 +129,24 @@ class LeaveApplicationController extends Controller
         $leaveApplication->save();
 
         return response()->json($leaveApplication, 200);
+    }
+    /**
+     * 
+     * updates leave applications with {id} 
+     * updates status of leave applications approved/rejected
+     * 
+     *  */
+    public function getEmployeeInformation($id)
+    {
+        // Fetch the user based on employees_id
+        $user = User::where('employees_id', $id)->first();
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // Return the user information
+        return response()->json($user);
     }
 }
