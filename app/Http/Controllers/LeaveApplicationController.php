@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SysEmployee;
 use App\Models\User;
 use App\Models\UserLeaveApplication;
+use App\Models\UserLeaveBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -167,5 +168,23 @@ class LeaveApplicationController extends Controller
 
         // Return the user information
         return response()->json($leaveApplication);
+    }
+    /**
+     * 
+     * get leave balance with employees id {id} 
+     * 
+     * 
+     *  */
+    public function getLeaveBalance($id)
+    {
+        // Fetch the user based on employees_id
+        $leaveBalance = UserLeaveBalance::where('employees_id', $id)->first();
+
+        if (!$leaveBalance) {
+            return response()->json(['message' => 'Leave balance not found'], 404);
+        }
+
+        // Return the leave balance information
+        return response()->json($leaveBalance ?? null);
     }
 }
