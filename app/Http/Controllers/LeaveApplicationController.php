@@ -132,8 +132,8 @@ class LeaveApplicationController extends Controller
     }
     /**
      * 
-     * updates leave applications with {id} 
-     * updates status of leave applications approved/rejected
+     * get employee information with specific {id} 
+     * 
      * 
      *  */
     public function getEmployeeInformation($id)
@@ -148,5 +148,24 @@ class LeaveApplicationController extends Controller
 
         // Return the user information
         return response()->json($user);
+    }
+    /**
+     * 
+     * get leave application with specific {id} 
+     * 
+     * 
+     *  */
+    public function getLeaveApplication($id)
+    {
+        // Fetch the user based on employees_id
+        $leaveApplication = UserLeaveApplication::find($id);
+
+        // Check if the user exists
+        if (!$leaveApplication) {
+            return response()->json(['message' => 'Leave application not found'], 404);
+        }
+
+        // Return the user information
+        return response()->json($leaveApplication);
     }
 }
