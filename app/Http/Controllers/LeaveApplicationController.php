@@ -61,10 +61,10 @@ class LeaveApplicationController extends Controller
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
-            'in_hospital' => 'nullable|boolean',
-            'out_patient' => 'nullable|boolean',
-            'completion_of_masters_degree' => 'nullable|boolean',
-            'bar_or_board_examination_review' => 'nullable|boolean',
+            // 'in_hospital' => 'nullable|boolean',
+            // 'out_patient' => 'nullable|boolean',
+            // 'completion_of_masters_degree' => 'nullable|boolean',
+            // 'bar_or_board_examination_review' => 'nullable|boolean',
         ]);
 
         $user = Auth::user();
@@ -79,10 +79,10 @@ class LeaveApplicationController extends Controller
             'specified_remark' => $validatedData['specified_remark'],
             'within_philippines' => $validatedData['within_philippines'],
             'abroad' => $validatedData['abroad'],
-            'in_hospital' => $validatedData['in_hospital'],
-            'out_patient' => $validatedData['out_patient'],
-            'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
-            'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
+            // 'in_hospital' => $validatedData['in_hospital'],
+            // 'out_patient' => $validatedData['out_patient'],
+            // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
+            // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
 
         return response()->json($createdData);
