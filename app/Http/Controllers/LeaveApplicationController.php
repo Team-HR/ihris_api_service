@@ -91,13 +91,13 @@ class LeaveApplicationController extends Controller
 
     /**
      * 
-     * Fetches all leave applications from database
+     * Fetches leave applications from database
      * 
      * 
      *  */
-    public function fetchAllLeaveApplications()
+    public function fetchLeaveApplications($status)
     {
-        $allData = UserLeaveApplication::orderBy('created_at', 'desc')->get();
+        $allData = UserLeaveApplication::where('status', $status)->orderBy('created_at', 'desc')->get();
 
         return response()->json($allData);
     }
