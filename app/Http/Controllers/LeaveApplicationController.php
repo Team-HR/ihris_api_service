@@ -42,6 +42,40 @@ class LeaveApplicationController extends Controller
 
         return response()->json($employees);
     }
+    /**
+     * 
+     * searches all leave application that matches the $name arg
+     * 
+     * 
+     *  */
+    public function searchLeaveApplication(Request $request)
+    {
+        $name = $request->query('name');
+
+        if (empty($name)) {
+            return response()->json([]);
+        }
+
+        // Split the name into parts
+        $nameParts = explode(' ', $name);
+
+        $leaveApplications = UserLeaveApplication::where(function ($query) use ($nameParts) {
+            foreach ($nameParts as $part) {
+                $query->orWhereHas('employee', function ($q) use ($part) {
+                    $q->where('firstName', 'LIKE', '%' . $part . '%')
+                        ->orWhere('lastName', 'LIKE', '%' . $part . '%')
+                        ->orWhere('middleName', 'LIKE', '%' . $part . '%');
+                })
+                    ->orWhere('leave_type', 'LIKE', '%' . $part . '%')
+                    ->orWhere('specified_remark', 'LIKE', '%' . $part . '%');
+            }
+        })
+            ->get();
+
+
+        return response()->json($leaveApplications);
+    }
+
 
     /**
      * 
@@ -49,7 +83,6 @@ class LeaveApplicationController extends Controller
      * 
      * 
      *  */
-
     public function createLeaveApplication(Request $request)
     {
         $validatedData = $request->validate([

@@ -32,5 +32,11 @@ class UserLeaveApplication extends Model
         return SysEmployee::find($this->employees_id);
     }
 
+    public function employee()
+    {
+        return $this->belongsTo(SysEmployee::class, 'employees_id');
+    }
+
+
     use HasFactory;
 }
