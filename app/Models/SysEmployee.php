@@ -27,6 +27,7 @@ class SysEmployee extends Model
     protected $appends = [
         'full_name',
         'department',
+        'position',
     ];
 
     public function getFullNameAttribute()
@@ -40,5 +41,10 @@ class SysEmployee extends Model
     public function getDepartmentAttribute()
     {
         return SysDepartment::find($this->department_id);
+    }
+
+    public function getPositionAttribute()
+    {
+        return PositionTitles::where('position_id', $this->position_id)->first();
     }
 }

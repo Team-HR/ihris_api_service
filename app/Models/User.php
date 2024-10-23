@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'employees_id',
         'username',
+        'type',
         'password',
     ];
 
@@ -30,6 +31,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'type',
     ];
 
     /**
@@ -47,7 +49,8 @@ class User extends Authenticatable
 
 
     protected $appends = [
-        'employee_information'
+        'employee_information',
+        'role'
     ];
 
 
@@ -55,5 +58,10 @@ class User extends Authenticatable
     {
         if (!$this->employees_id) return null;
         return SysEmployee::find($this->employees_id);
+    }
+
+    public function getRoleAttribute(): array
+    {
+        return explode(',', $this->attributes['type']);
     }
 }
