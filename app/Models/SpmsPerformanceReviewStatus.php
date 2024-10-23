@@ -28,14 +28,20 @@ class SpmsPerformanceReviewStatus extends Model
 
     // Disable timestamps
     public $timestamps = false;
-    
+
 
     protected $appends = [
         'department',
+        'period'
     ];
 
     public function getDepartmentAttribute()
     {
         return SysDepartment::find($this->department_id);
+    }
+
+    public function getPeriodAttribute()
+    {
+        return SpmsMfoPeriod::find($this->period_id);
     }
 }
