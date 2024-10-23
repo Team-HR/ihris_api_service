@@ -20,6 +20,7 @@ class UserLeaveApplication extends Model
         'out_patient',
         'completion_of_masters_degree',
         'bar_or_board_examination_review',
+        'rejection_remark',
     ];
 
     protected $appends = [

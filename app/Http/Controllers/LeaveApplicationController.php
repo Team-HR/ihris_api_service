@@ -146,8 +146,9 @@ class LeaveApplicationController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'status' => 'required|string|in:approved,rejected,pending', // Adjust statuses as needed
-            'id' => 'required|int'
+            'status' => 'required|string|in:approved,rejected,pending',
+            'id' => 'required|integer',
+            'rejection_remark' => 'string|nullable',
         ]);
 
         // Find the leave application by ID
@@ -158,9 +159,11 @@ class LeaveApplicationController extends Controller
             return response()->json(['message' => 'Leave application not found'], 404);
         }
 
-        // Update the status
-        $leaveApplication->status = $validatedData['status'];
-        $leaveApplication->save();
+        // Update the status and rejection remark
+        $leaveApplication->update([
+            'status' => $validatedData['status'],
+            'rejection_remark' => $validatedData['rejection_remark'] ?? null, // Handle nullable remark
+        ]);
 
         return response()->json($leaveApplication, 200);
     }
