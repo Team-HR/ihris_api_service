@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LeaveApplicationController;
+use App\Http\Controllers\PcrController;
 use App\Http\Controllers\RatingScaleMatrixController;
 use App\Http\Controllers\SuccessIndicatorController;
 use App\Http\Controllers\SysEmployeeController;
@@ -38,6 +39,13 @@ Route::middleware('auth:sanctum')->group(function () {
         $period = SpmsMfoPeriod::where('month_mfo', $selectedPeriod)->where('year_mfo', $selectedYear)->first();
         return $period ? $period->mfoperiod_id : null;
     });
+
+    /**
+     * 
+     * RSM
+     * 
+     * */
+
     Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle']);
     Route::get('/rsm/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrix']);
     Route::post('/mfo', [RatingScaleMatrixController::class, 'addNewMfo']);
@@ -46,5 +54,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'deleteMfo']);
     Route::post('/getRsmMfos', [RatingScaleMatrixController::class, 'getRatingScaleMatrixMfosOnly']);
     Route::post('/moveMfoToNewParent', [RatingScaleMatrixController::class, 'moveMfoToNewParent']);
+    Route::post('/si/saveEdit', [SuccessIndicatorController::class, 'saveSuccessIndicator']);
     Route::delete('/si/{id}', [SuccessIndicatorController::class, 'deleteSuccessIndicator']);
+
+    /**
+     * 
+     * PCR
+     * 
+     * */
+
+    Route::get('/pcr/{period_id}', [PcrController::class, 'getPcr']);
 });

@@ -116,7 +116,6 @@ class SpmsSuccessIndicator extends Model
     {
         if (!isset($this->mi_time)) return null;
         $timeliness = unserialize($this->mi_time);
-        // return checkIfNotEmpty($timeliness) ? $timeliness : null;
         if (checkIfNotEmpty($timeliness)) {
             $flipped_arr = [];
             $lenght = count($timeliness);
@@ -131,6 +130,8 @@ class SpmsSuccessIndicator extends Model
 
 function checkIfNotEmpty($arr)
 {
+    if (!is_array($arr)) return false;
+
     foreach ($arr as $key => $value) {
         if (!empty($value)) {
             return true;
