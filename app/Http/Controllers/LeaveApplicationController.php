@@ -8,6 +8,7 @@ use App\Models\UserLeaveApplication;
 use App\Models\UserLeaveBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveApplicationController extends Controller
 {
@@ -94,6 +95,8 @@ class LeaveApplicationController extends Controller
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
+            'authority_to_travel' => 'nullable|file|max:2048',
+            // 'clearance' => 'nullable|file|max:2048',
             // 'in_hospital' => 'nullable|boolean',
             // 'out_patient' => 'nullable|boolean',
             // 'completion_of_masters_degree' => 'nullable|boolean',
@@ -117,6 +120,17 @@ class LeaveApplicationController extends Controller
             // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
             // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
+
+        // Check if the file exists
+        if ($request->hasFile('authority_to_travel')) {
+            // Retrieve the file from the request
+            $file = $request->file('authority_to_travel');
+
+            // Store the file with the desired name
+            $path = Storage::putFileAs("{$validatedData['employees_id']}/VacationLeave/", $file, 'test.' . $file->extension());
+
+            // Optionally, you can handle the path or perform additional actions
+        }
 
         return response()->json($createdData);
     }
