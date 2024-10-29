@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserLeaveFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,17 +12,47 @@ class LeaveApplicationFilerController extends Controller
     {
         $validated = $request->validate([
             'employees_id' => 'required|integer',
+            'leave_id' => 'required|integer', // Ensure you validate leave_id if it's required
             'authority_to_travel' => 'nullable|file|max:2048',
             'clearance' => 'nullable|file|max:2048',
         ]);
 
         $currentDate = date('Y-m-d');
+        $authorityPath = null;
+        $authorityFile = null;
+        $clearancePath = null;
+        $clearanceFile = null;
 
+        // Store the authority to travel file
         if ($validated['authority_to_travel']) {
-            Storage::putFileAs("{$validated['employees_id']}/vacation_leave/authority_to_travel", $validated['authority_to_travel'], $currentDate . "." . $validated['authority_to_travel']->extension());
+            $authorityPath = "{$validated['employees_id']}/vacation_leave/authority_to_travel";
+            $authorityFile = $currentDate . "_authority_to_travel." . $validated['authority_to_travel']->extension();
+            Storage::putFileAs($authorityPath, $validated['authority_to_travel'], $authorityFile);
         }
+
+        // Store the clearance file
         if ($validated['clearance']) {
-            Storage::putFileAs("{$validated['employees_id']}/vacation_leave/clearance", $validated['clearance'], $currentDate . "." . $validated['clearance']->extension());
+            $clearancePath = "{$validated['employees_id']}/vacation_leave/clearance";
+            $clearanceFile = $currentDate . "_clearance." . $validated['clearance']->extension();
+            Storage::putFileAs($clearancePath, $validated['clearance'], $clearanceFile);
         }
+
+        // Create a new instance of the UserLeaveFiles model
+        UserLeaveFiles::create([
+            'employees_id' => $validated['employees_id'],
+            'leave_id' => $validated['leave_id'],
+            'authority_of_leave_path' => $authorityPath,
+            'authority_of_leave_filename' => $authorityFile,
+            'clearance_path' => $clearancePath,
+            'clearance_filename' => $clearanceFile,
+        ]);
+
+        return response()->json(['message' => 'Files uploaded successfully'], 201);
+    }
+    public function getVacationLeaveRequirements($id)
+    {
+        $userRequirements = UserLeaveFiles::where('leave_id', $id)->first();
+
+        return response()->json($userRequirements);
     }
 }
