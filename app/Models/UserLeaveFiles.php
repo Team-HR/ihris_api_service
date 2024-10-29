@@ -10,8 +10,8 @@ class UserLeaveFiles extends Model
     protected $fillable = [
         'employees_id',
         'leave_id',
-        'authority_of_leave_path',
-        'authority_of_leave_filename',
+        'authority_to_travel_path',
+        'authority_to_travel_filename',
         'clearance_path',
         'clearance_filename',
     ];

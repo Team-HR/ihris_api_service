@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('employees_id');
             $table->unsignedBigInteger('leave_id');
-            $table->string('authority_of_leave_path')->nullable();
-            $table->string('authority_of_leave_filename')->nullable();
+            $table->string('authority_to_travel_path')->nullable();
+            $table->string('authority_to_travel_filename')->nullable();
             $table->string('clearance_path')->nullable();
             $table->string('clearance_filename')->nullable();
             $table->timestamps();

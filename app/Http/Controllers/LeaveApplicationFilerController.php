@@ -41,8 +41,8 @@ class LeaveApplicationFilerController extends Controller
         UserLeaveFiles::create([
             'employees_id' => $validated['employees_id'],
             'leave_id' => $validated['leave_id'],
-            'authority_of_leave_path' => $authorityPath,
-            'authority_of_leave_filename' => $authorityFile,
+            'authority_to_travel_path' => $authorityPath,
+            'authority_to_travel_filename' => $authorityFile,
             'clearance_path' => $clearancePath,
             'clearance_filename' => $clearanceFile,
         ]);

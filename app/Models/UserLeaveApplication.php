@@ -25,12 +25,17 @@ class UserLeaveApplication extends Model
 
     protected $appends = [
         'employee_information',
+        'leave_files'
     ];
 
     public function getEmployeeInformationAttribute()
     {
         if (!$this->employees_id) return null;
         return SysEmployee::find($this->employees_id);
+    }
+    public function getLeaveFilesAttribute()
+    {
+        return UserLeaveFiles::where('leave_id', $this->id)->first();
     }
 
     public function employee()
