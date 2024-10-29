@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class LeaveApplicationFilerController extends Controller
 {
-    public function postVacationLeaveRequirements(Request $request)
+    public function uploadVacationLeaveRequirements(Request $request)
     {
         $validated = $request->validate([
             'employees_id' => 'required|integer',
@@ -49,10 +49,19 @@ class LeaveApplicationFilerController extends Controller
 
         return response()->json(['message' => 'Files uploaded successfully'], 201);
     }
-    public function getVacationLeaveRequirements($id)
+    public function downloadFile(Request $request)
     {
-        $userRequirements = UserLeaveFiles::where('leave_id', $id)->first();
+        $validated = $request->validate([
+            'path' => 'required|string',
+            'file' => 'required|string',
+        ]);
 
-        return response()->json($userRequirements);
+        $fullPath = $validated['path'] . '/' . $validated['file'];
+
+        if (!Storage::exists($fullPath)) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        return response()->download(storage_path("app/{$fullPath}"));
     }
 }
