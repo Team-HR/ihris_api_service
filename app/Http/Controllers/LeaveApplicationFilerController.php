@@ -26,14 +26,14 @@ class LeaveApplicationFilerController extends Controller
         // Store the authority to travel file
         if ($validated['authority_to_travel']) {
             $authorityPath = "{$validated['employees_id']}/vacation_leave/authority_to_travel";
-            $authorityFile = $currentDate . "_authority_to_travel." . $validated['authority_to_travel']->extension();
+            $authorityFile = $currentDate . "_authority_to_travel_" . $validated['employees_id'] . '.' . $validated['authority_to_travel']->extension();
             Storage::putFileAs($authorityPath, $validated['authority_to_travel'], $authorityFile);
         }
 
         // Store the clearance file
         if ($validated['clearance']) {
             $clearancePath = "{$validated['employees_id']}/vacation_leave/clearance";
-            $clearanceFile = $currentDate . "_clearance." . $validated['clearance']->extension();
+            $clearanceFile = $currentDate . "_clearance_" . $validated['employees_id'] . '.' . $validated['clearance']->extension();
             Storage::putFileAs($clearancePath, $validated['clearance'], $clearanceFile);
         }
 
