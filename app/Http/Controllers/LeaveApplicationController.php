@@ -121,17 +121,6 @@ class LeaveApplicationController extends Controller
             // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
 
-        // Check if the file exists
-        if ($request->hasFile('authority_to_travel')) {
-            // Retrieve the file from the request
-            $file = $request->file('authority_to_travel');
-
-            // Store the file with the desired name
-            $path = Storage::putFileAs("{$validatedData['employees_id']}/VacationLeave/", $file, 'test.' . $file->extension());
-
-            // Optionally, you can handle the path or perform additional actions
-        }
-
         return response()->json($createdData);
     }
 
