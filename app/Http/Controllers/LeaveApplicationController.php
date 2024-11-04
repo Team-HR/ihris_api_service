@@ -95,7 +95,7 @@ class LeaveApplicationController extends Controller
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
-            'authority_to_travel' => 'nullable|file|max:2048',
+            // 'authority_to_travel' => 'nullable|file|max:2048',
             // 'clearance' => 'nullable|file|max:2048',
             // 'in_hospital' => 'nullable|boolean',
             // 'out_patient' => 'nullable|boolean',
