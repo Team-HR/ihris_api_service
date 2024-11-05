@@ -53,7 +53,6 @@ class User extends Authenticatable
         'role'
     ];
 
-
     public function getEmployeeInformationAttribute()
     {
         if (!$this->employees_id) return null;

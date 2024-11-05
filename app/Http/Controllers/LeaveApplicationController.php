@@ -104,7 +104,7 @@ class LeaveApplicationController extends Controller
         ]);
 
         $user = Auth::user();
-        $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
+        $status = in_array('Leave_admin', $user->role) ? 'pending' : 'pending';
 
         $createdData = UserLeaveApplication::create([
             'employees_id' => $validatedData['employees_id'],

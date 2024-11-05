@@ -14,6 +14,10 @@ class UserLeaveFiles extends Model
         'authority_to_travel_filename',
         'clearance_path',
         'clearance_filename',
+        'medical_certificate_path',
+        'medical_certificate_filename',
+        'birth_certificate_path',
+        'birth_certificate_filename',
     ];
 
     use HasFactory;
