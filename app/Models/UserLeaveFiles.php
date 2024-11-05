@@ -20,6 +20,16 @@ class UserLeaveFiles extends Model
         'birth_certificate_filename',
         'solo_parent_id_path',
         'solo_parent_id_filename',
+        'barangay_protection_order_path',
+        'barangay_protection_order_filename',
+        'temporary_or_permanent_protection_order_path',
+        'temporary_or_permanent_protection_order_filename',
+        'police_report_path',
+        'police_report_filename',
+        'incident_report_path',
+        'incident_report_filename',
+        'approved_letter_of_mayor_path',
+        'approved_letter_of_mayor_filename',
     ];
 
     use HasFactory;
