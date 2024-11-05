@@ -17,6 +17,7 @@ class LeaveApplicationFilerController extends Controller
             'clearance' => 'nullable|file|max:2048',
             'medical_certificate' => 'nullable|file|max:2048',
             'birth_certificate' => 'nullable|file|max:2048',
+            'solo_parent_id' => 'nullable|file|max:2048',
         ]);
 
         $currentDate = date('Y-m-d');
@@ -28,6 +29,8 @@ class LeaveApplicationFilerController extends Controller
         $medicalCertificateFile = null;
         $birthCertificatePath = null;
         $birthCertificateFile = null;
+        $soloParentIdPath = null;
+        $soloParentIdFile = null;
 
         // Store the authority to travel file
         if (isset($validated['authority_to_travel'])) {
@@ -46,15 +49,22 @@ class LeaveApplicationFilerController extends Controller
         // Store the medical cert file
         if (isset($validated['medical_certificate'])) {
             $medicalCertificatePath = "{$validated['employees_id']}/medical_certificate";
-            $medicalCertificateFile = $currentDate . "_medical_certificate_" . $validated['employees_id'] . '.' . $validated['clearance']->extension();
+            $medicalCertificateFile = $currentDate . "_medical_certificate_" . $validated['employees_id'] . '.' . $validated['medical_certificate']->extension();
             Storage::putFileAs($medicalCertificatePath, $validated['medical_certificate'], $medicalCertificateFile);
         }
 
         // Store the birth cert file
         if (isset($validated['birth_certificate'])) {
             $birthCertificatePath = "{$validated['employees_id']}/birth_certificate";
-            $birthCertificateFile = $currentDate . "_birth_certificate_" . $validated['employees_id'] . '.' . $validated['clearance']->extension();
+            $birthCertificateFile = $currentDate . "_birth_certificate_" . $validated['employees_id'] . '.' . $validated['birth_certificate']->extension();
             Storage::putFileAs($birthCertificatePath, $validated['birth_certificate'], $birthCertificateFile);
+        }
+
+        // Store the solo parent cert file
+        if (isset($validated['solo_parent_id'])) {
+            $soloParentIdPath = "{$validated['employees_id']}/solo_parent_id";
+            $soloParentIdFile = $currentDate . "_solo_parent_id_" . $validated['employees_id'] . '.' . $validated['solo_parent_id']->extension();
+            Storage::putFileAs($soloParentIdPath, $validated['solo_parent_id'], $soloParentIdFile);
         }
 
         // Create a new instance of the UserLeaveFiles model
@@ -69,6 +79,8 @@ class LeaveApplicationFilerController extends Controller
             'birth_certificate_filename' => $birthCertificateFile,
             'medical_certificate_path' => $medicalCertificatePath,
             'medical_certificate_filename' => $medicalCertificateFile,
+            'solo_parent_id_path' => $soloParentIdPath,
+            'solo_parent_id_filename' => $soloParentIdFile,
         ]);
 
         return response()->json(['message' => 'Files uploaded successfully'], 201);
