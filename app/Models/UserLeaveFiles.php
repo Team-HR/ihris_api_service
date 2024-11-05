@@ -18,6 +18,8 @@ class UserLeaveFiles extends Model
         'medical_certificate_filename',
         'birth_certificate_path',
         'birth_certificate_filename',
+        'solo_parent_id_path',
+        'solo_parent_id_filename',
     ];
 
     use HasFactory;
