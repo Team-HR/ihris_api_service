@@ -18,6 +18,11 @@ class LeaveApplicationFilerController extends Controller
             'medical_certificate' => 'nullable|file|max:2048',
             'birth_certificate' => 'nullable|file|max:2048',
             'solo_parent_id' => 'nullable|file|max:2048',
+            'barangay_protection_order' => 'nullable|file|max:2048',
+            'temporary_or_permanent_protection_order' => 'nullable|file|max:2048',
+            'police_report' => 'nullable|file|max:2048',
+            'incident_report' => 'nullable|file|max:2048',
+            'approved_letter_of_mayor' => 'nullable|file|max:2048',
         ]);
 
         $currentDate = date('Y-m-d');
@@ -31,6 +36,16 @@ class LeaveApplicationFilerController extends Controller
         $birthCertificateFile = null;
         $soloParentIdPath = null;
         $soloParentIdFile = null;
+        $brgyProtectionOrderPath = null;
+        $brgyProtectionOrderFile = null;
+        $TemporaryOrPermanentProtectionOrderPath = null;
+        $TemporaryOrPermanentProtectionOrderFile = null;
+        $PoliceReportPath = null;
+        $PoliceReportFile = null;
+        $IncidentReportPath = null;
+        $IncidentReportFile = null;
+        $ApprovedLetterOfMayorPath = null;
+        $ApprovedLetterOfMayorFile = null;
 
         // Store the authority to travel file
         if (isset($validated['authority_to_travel'])) {
@@ -67,6 +82,41 @@ class LeaveApplicationFilerController extends Controller
             Storage::putFileAs($soloParentIdPath, $validated['solo_parent_id'], $soloParentIdFile);
         }
 
+        // Store the brgy protection order file
+        if (isset($validated['barangay_protection_order'])) {
+            $brgyProtectionOrderPath = "{$validated['employees_id']}/barangay_protection_order";
+            $brgyProtectionOrderFile = $currentDate . "_barangay_protection_order_" . $validated['employees_id'] . '.' . $validated['barangay_protection_order']->extension();
+            Storage::putFileAs($brgyProtectionOrderPath, $validated['barangay_protection_order'], $brgyProtectionOrderFile);
+        }
+
+        // Store the temporary or permanent protection order file
+        if (isset($validated['temporary_or_permanent_protection_order'])) {
+            $TemporaryOrPermanentProtectionOrderPath = "{$validated['employees_id']}/temporary_or_permanent_protection_order";
+            $TemporaryOrPermanentProtectionOrderFile = $currentDate . "_temporary_or_permanent_protection_order_" . $validated['employees_id'] . '.' . $validated['temporary_or_permanent_protection_order']->extension();
+            Storage::putFileAs($TemporaryOrPermanentProtectionOrderPath, $validated['temporary_or_permanent_protection_order'], $TemporaryOrPermanentProtectionOrderFile);
+        }
+
+        // Store the Police report file
+        if (isset($validated['police_report'])) {
+            $PoliceReportPath = "{$validated['employees_id']}/police_report";
+            $PoliceReportFile = $currentDate . "_police_report_" . $validated['employees_id'] . '.' . $validated['police_report']->extension();
+            Storage::putFileAs($PoliceReportPath, $validated['police_report'], $PoliceReportFile);
+        }
+
+        // Store the Incident report file
+        if (isset($validated['incident_report'])) {
+            $IncidentReportPath = "{$validated['employees_id']}/incident_report";
+            $IncidentReportFile = $currentDate . "_incident_report_" . $validated['employees_id'] . '.' . $validated['incident_report']->extension();
+            Storage::putFileAs($IncidentReportPath, $validated['incident_report'], $IncidentReportFile);
+        }
+
+        // Store the Approved letter of mayor file
+        if (isset($validated['approved_letter_of_mayor'])) {
+            $ApprovedLetterOfMayorPath = "{$validated['employees_id']}/approved_letter_of_mayor";
+            $ApprovedLetterOfMayorFile = $currentDate . "_approved_letter_of_mayor_" . $validated['employees_id'] . '.' . $validated['approved_letter_of_mayor']->extension();
+            Storage::putFileAs($ApprovedLetterOfMayorPath, $validated['approved_letter_of_mayor'], $ApprovedLetterOfMayorFile);
+        }
+
         // Create a new instance of the UserLeaveFiles model
         UserLeaveFiles::create([
             'employees_id' => $validated['employees_id'],
@@ -81,6 +131,16 @@ class LeaveApplicationFilerController extends Controller
             'medical_certificate_filename' => $medicalCertificateFile,
             'solo_parent_id_path' => $soloParentIdPath,
             'solo_parent_id_filename' => $soloParentIdFile,
+            'barangay_protection_order_path' => $brgyProtectionOrderPath,
+            'barangay_protection_order_filename' => $brgyProtectionOrderFile,
+            'temporary_or_permanent_protection_order_path' => $TemporaryOrPermanentProtectionOrderPath,
+            'temporary_or_permanent_protection_order_filename' => $TemporaryOrPermanentProtectionOrderFile,
+            'police_report_path' => $PoliceReportPath,
+            'police_report_filename' => $PoliceReportFile,
+            'incident_report_path' => $IncidentReportPath,
+            'incident_report_filename' => $IncidentReportFile,
+            'approved_letter_of_mayor_path' => $ApprovedLetterOfMayorPath,
+            'approved_letter_of_mayor_filename' => $ApprovedLetterOfMayorFile,
         ]);
 
         return response()->json(['message' => 'Files uploaded successfully'], 201);
