@@ -29,6 +29,8 @@ class UserLeaveApplication extends Model
         'mandatory_or_forced_leave_balance',
         'solo_parent_balance',
         'paternity_balance',
+        'vawc_leave_balance',
+        'rehabilitation_leave_balance',
     ];
 
     public function getEmployeeInformationAttribute()
@@ -79,6 +81,42 @@ class UserLeaveApplication extends Model
     public function getPaternityBalanceAttribute()
     {
         $toCount = UserLeaveApplication::where('leave_type', 'Paternity leave')
+            ->where('employees_id', $this->employees_id)
+            ->where('status', 'approved')
+            ->whereYear('created_at', date('Y'))
+            ->get();
+
+        $count = 0;
+
+        foreach ($toCount as $item) {
+            // Decode the JSON array
+            $dates = json_decode($item->leave_dates, true); // true for associative array
+            $count += count($dates); // Count the number of dates in the array
+        }
+
+        return $count;
+    }
+    public function getVawcLeaveBalanceAttribute()
+    {
+        $toCount = UserLeaveApplication::where('leave_type', '10-Day VAWC leave')
+            ->where('employees_id', $this->employees_id)
+            ->where('status', 'approved')
+            ->whereYear('created_at', date('Y'))
+            ->get();
+
+        $count = 0;
+
+        foreach ($toCount as $item) {
+            // Decode the JSON array
+            $dates = json_decode($item->leave_dates, true); // true for associative array
+            $count += count($dates); // Count the number of dates in the array
+        }
+
+        return $count;
+    }
+    public function getRehabilitationLeaveBalanceAttribute()
+    {
+        $toCount = UserLeaveApplication::where('leave_type', 'Rehabilitation leave')
             ->where('employees_id', $this->employees_id)
             ->where('status', 'approved')
             ->whereYear('created_at', date('Y'))

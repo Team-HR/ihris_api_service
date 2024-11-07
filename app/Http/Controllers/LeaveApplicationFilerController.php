@@ -49,70 +49,70 @@ class LeaveApplicationFilerController extends Controller
 
         // Store the authority to travel file
         if (isset($validated['authority_to_travel'])) {
-            $authorityPath = "{$validated['employees_id']}/authority_to_travel";
+            $authorityPath = "ihris_leave_management/{$validated['employees_id']}/authority_to_travel";
             $authorityFile = $currentDate . "_authority_to_travel_" . $validated['employees_id'] . '.' . $validated['authority_to_travel']->extension();
             Storage::putFileAs($authorityPath, $validated['authority_to_travel'], $authorityFile);
         }
 
         // Store the clearance file
         if (isset($validated['clearance'])) {
-            $clearancePath = "{$validated['employees_id']}/clearance";
+            $clearancePath = "ihris_leave_management/{$validated['employees_id']}/clearance";
             $clearanceFile = $currentDate . "_clearance_" . $validated['employees_id'] . '.' . $validated['clearance']->extension();
             Storage::putFileAs($clearancePath, $validated['clearance'], $clearanceFile);
         }
 
         // Store the medical cert file
         if (isset($validated['medical_certificate'])) {
-            $medicalCertificatePath = "{$validated['employees_id']}/medical_certificate";
+            $medicalCertificatePath = "ihris_leave_management/{$validated['employees_id']}/medical_certificate";
             $medicalCertificateFile = $currentDate . "_medical_certificate_" . $validated['employees_id'] . '.' . $validated['medical_certificate']->extension();
             Storage::putFileAs($medicalCertificatePath, $validated['medical_certificate'], $medicalCertificateFile);
         }
 
         // Store the birth cert file
         if (isset($validated['birth_certificate'])) {
-            $birthCertificatePath = "{$validated['employees_id']}/birth_certificate";
+            $birthCertificatePath = "ihris_leave_management/{$validated['employees_id']}/birth_certificate";
             $birthCertificateFile = $currentDate . "_birth_certificate_" . $validated['employees_id'] . '.' . $validated['birth_certificate']->extension();
             Storage::putFileAs($birthCertificatePath, $validated['birth_certificate'], $birthCertificateFile);
         }
 
         // Store the solo parent cert file
         if (isset($validated['solo_parent_id'])) {
-            $soloParentIdPath = "{$validated['employees_id']}/solo_parent_id";
+            $soloParentIdPath = "ihris_leave_management/{$validated['employees_id']}/solo_parent_id";
             $soloParentIdFile = $currentDate . "_solo_parent_id_" . $validated['employees_id'] . '.' . $validated['solo_parent_id']->extension();
             Storage::putFileAs($soloParentIdPath, $validated['solo_parent_id'], $soloParentIdFile);
         }
 
         // Store the brgy protection order file
         if (isset($validated['barangay_protection_order'])) {
-            $brgyProtectionOrderPath = "{$validated['employees_id']}/barangay_protection_order";
+            $brgyProtectionOrderPath = "ihris_leave_management/{$validated['employees_id']}/barangay_protection_order";
             $brgyProtectionOrderFile = $currentDate . "_barangay_protection_order_" . $validated['employees_id'] . '.' . $validated['barangay_protection_order']->extension();
             Storage::putFileAs($brgyProtectionOrderPath, $validated['barangay_protection_order'], $brgyProtectionOrderFile);
         }
 
         // Store the temporary or permanent protection order file
         if (isset($validated['temporary_or_permanent_protection_order'])) {
-            $TemporaryOrPermanentProtectionOrderPath = "{$validated['employees_id']}/temporary_or_permanent_protection_order";
+            $TemporaryOrPermanentProtectionOrderPath = "ihris_leave_management/{$validated['employees_id']}/temporary_or_permanent_protection_order";
             $TemporaryOrPermanentProtectionOrderFile = $currentDate . "_temporary_or_permanent_protection_order_" . $validated['employees_id'] . '.' . $validated['temporary_or_permanent_protection_order']->extension();
             Storage::putFileAs($TemporaryOrPermanentProtectionOrderPath, $validated['temporary_or_permanent_protection_order'], $TemporaryOrPermanentProtectionOrderFile);
         }
 
         // Store the Police report file
         if (isset($validated['police_report'])) {
-            $PoliceReportPath = "{$validated['employees_id']}/police_report";
+            $PoliceReportPath = "ihris_leave_management/{$validated['employees_id']}/police_report";
             $PoliceReportFile = $currentDate . "_police_report_" . $validated['employees_id'] . '.' . $validated['police_report']->extension();
             Storage::putFileAs($PoliceReportPath, $validated['police_report'], $PoliceReportFile);
         }
 
         // Store the Incident report file
         if (isset($validated['incident_report'])) {
-            $IncidentReportPath = "{$validated['employees_id']}/incident_report";
+            $IncidentReportPath = "ihris_leave_management/{$validated['employees_id']}/incident_report";
             $IncidentReportFile = $currentDate . "_incident_report_" . $validated['employees_id'] . '.' . $validated['incident_report']->extension();
             Storage::putFileAs($IncidentReportPath, $validated['incident_report'], $IncidentReportFile);
         }
 
         // Store the Approved letter of mayor file
         if (isset($validated['approved_letter_of_mayor'])) {
-            $ApprovedLetterOfMayorPath = "{$validated['employees_id']}/approved_letter_of_mayor";
+            $ApprovedLetterOfMayorPath = "ihris_leave_management/{$validated['employees_id']}/approved_letter_of_mayor";
             $ApprovedLetterOfMayorFile = $currentDate . "_approved_letter_of_mayor_" . $validated['employees_id'] . '.' . $validated['approved_letter_of_mayor']->extension();
             Storage::putFileAs($ApprovedLetterOfMayorPath, $validated['approved_letter_of_mayor'], $ApprovedLetterOfMayorFile);
         }
