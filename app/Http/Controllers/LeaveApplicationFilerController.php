@@ -23,6 +23,12 @@ class LeaveApplicationFilerController extends Controller
             'police_report' => 'nullable|file|max:2048',
             'incident_report' => 'nullable|file|max:2048',
             'approved_letter_of_mayor' => 'nullable|file|max:2048',
+            'fit_to_work_certification' => 'nullable|file|max:2048',
+            'operating_room_record' => 'nullable|file|max:2048',
+            'hospital_abstract' => 'nullable|file|max:2048',
+            'discharge_summary' => 'nullable|file|max:2048',
+            'histopath_report' => 'nullable|file|max:2048',
+            'pre_adoptive_placement_authority' => 'nullable|file|max:2048',
         ]);
 
         $currentDate = date('Y-m-d');
@@ -46,6 +52,18 @@ class LeaveApplicationFilerController extends Controller
         $IncidentReportFile = null;
         $ApprovedLetterOfMayorPath = null;
         $ApprovedLetterOfMayorFile = null;
+        $FitToWorkCertificationPath = null;
+        $FitToWorkCertificationFile = null;
+        $OperatingRoomRecordPath = null;
+        $OperatingRoomRecordFile = null;
+        $HospitalAbstractPath = null;
+        $HospitalAbstractFile = null;
+        $DischargeSummaryPath = null;
+        $DischargeSummaryFile = null;
+        $HistoPathReportPath = null;
+        $HistoPathReportFile = null;
+        $PreAdoptivePlacementAuthorityPath = null;
+        $PreAdoptivePlacementAuthorityFile = null;
 
         // Store the authority to travel file
         if (isset($validated['authority_to_travel'])) {
@@ -117,6 +135,48 @@ class LeaveApplicationFilerController extends Controller
             Storage::putFileAs($ApprovedLetterOfMayorPath, $validated['approved_letter_of_mayor'], $ApprovedLetterOfMayorFile);
         }
 
+        // Store the Fit to work certification file
+        if (isset($validated['fit_to_work_certification'])) {
+            $FitToWorkCertificationPath = "ihris_leave_management/{$validated['employees_id']}/fit_to_work_certification";
+            $FitToWorkCertificationFile = $currentDate . "_fit_to_work_certification_" . $validated['employees_id'] . '.' . $validated['fit_to_work_certification']->extension();
+            Storage::putFileAs($FitToWorkCertificationPath, $validated['fit_to_work_certification'], $FitToWorkCertificationFile);
+        }
+
+        // Store the Operating room record file
+        if (isset($validated['operating_room_record'])) {
+            $OperatingRoomRecordPath = "ihris_leave_management/{$validated['employees_id']}/operating_room_record";
+            $OperatingRoomRecordFile = $currentDate . "_operating_room_record_" . $validated['employees_id'] . '.' . $validated['operating_room_record']->extension();
+            Storage::putFileAs($OperatingRoomRecordPath, $validated['operating_room_record'], $OperatingRoomRecordFile);
+        }
+
+        // Store the Hospital abstract record file
+        if (isset($validated['hospital_abstract'])) {
+            $HospitalAbstractPath = "ihris_leave_management/{$validated['employees_id']}/hospital_abstract";
+            $HospitalAbstractFile = $currentDate . "_hospital_abstract_" . $validated['employees_id'] . '.' . $validated['hospital_abstract']->extension();
+            Storage::putFileAs($HospitalAbstractPath, $validated['hospital_abstract'], $HospitalAbstractFile);
+        }
+
+        // Store the Discharge Summary record file
+        if (isset($validated['discharge_summary'])) {
+            $DischargeSummaryPath = "ihris_leave_management/{$validated['employees_id']}/discharge_summary";
+            $DischargeSummaryFile = $currentDate . "_discharge_summary_" . $validated['employees_id'] . '.' . $validated['discharge_summary']->extension();
+            Storage::putFileAs($DischargeSummaryPath, $validated['discharge_summary'], $DischargeSummaryFile);
+        }
+
+        // Store the HistoPath Report record file
+        if (isset($validated['histopath_report'])) {
+            $HistoPathReportPath = "ihris_leave_management/{$validated['employees_id']}/histopath_report";
+            $HistoPathReportFile = $currentDate . "_histopath_report_" . $validated['employees_id'] . '.' . $validated['histopath_report']->extension();
+            Storage::putFileAs($HistoPathReportPath, $validated['histopath_report'], $HistoPathReportFile);
+        }
+
+        // Store the HistoPath Report record file
+        if (isset($validated['pre_adoptive_placement_authority'])) {
+            $PreAdoptivePlacementAuthorityPath = "ihris_leave_management/{$validated['employees_id']}/pre_adoptive_placement_authority";
+            $PreAdoptivePlacementAuthorityFile = $currentDate . "_pre_adoptive_placement_authority_" . $validated['employees_id'] . '.' . $validated['pre_adoptive_placement_authority']->extension();
+            Storage::putFileAs($PreAdoptivePlacementAuthorityPath, $validated['pre_adoptive_placement_authority'], $PreAdoptivePlacementAuthorityFile);
+        }
+
         // Create a new instance of the UserLeaveFiles model
         UserLeaveFiles::create([
             'employees_id' => $validated['employees_id'],
@@ -141,6 +201,18 @@ class LeaveApplicationFilerController extends Controller
             'incident_report_filename' => $IncidentReportFile,
             'approved_letter_of_mayor_path' => $ApprovedLetterOfMayorPath,
             'approved_letter_of_mayor_filename' => $ApprovedLetterOfMayorFile,
+            'fit_to_work_certification_path' => $FitToWorkCertificationPath,
+            'fit_to_work_certification_filename' => $FitToWorkCertificationFile,
+            'operating_room_record_path' => $OperatingRoomRecordPath,
+            'operating_room_record_filename' => $OperatingRoomRecordFile,
+            'hospital_abstract_path' => $HospitalAbstractPath,
+            'hospital_abstract_filename' => $HospitalAbstractFile,
+            'discharge_summary_path' => $DischargeSummaryPath,
+            'discharge_summary_filename' => $DischargeSummaryFile,
+            'histopath_report_path' => $HistoPathReportPath,
+            'histopath_report_filename' => $HistoPathReportFile,
+            'pre_adoptive_placement_authority_path' => $PreAdoptivePlacementAuthorityPath,
+            'pre_adoptive_placement_authority_filename' => $PreAdoptivePlacementAuthorityFile,
         ]);
 
         return response()->json(['message' => 'Files uploaded successfully'], 201);
