@@ -95,16 +95,17 @@ class LeaveApplicationController extends Controller
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
-            // 'authority_to_travel' => 'nullable|file|max:2048',
-            // 'clearance' => 'nullable|file|max:2048',
-            // 'in_hospital' => 'nullable|boolean',
-            // 'out_patient' => 'nullable|boolean',
-            // 'completion_of_masters_degree' => 'nullable|boolean',
-            // 'bar_or_board_examination_review' => 'nullable|boolean',
+            'in_hospital' => 'nullable|boolean',
+            'out_patient' => 'nullable|boolean',
+            'half_days' => ['nullable', 'array'], // `half_days` can be null or an array
+            'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
+            'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
         ]);
 
         $user = Auth::user();
         $status = in_array('Leave_admin', $user->role) ? 'pending' : 'pending';
+        // If half_days is provided, encode it as a JSON string, else leave it null
+
 
         $createdData = UserLeaveApplication::create([
             'employees_id' => $validatedData['employees_id'],
@@ -115,8 +116,9 @@ class LeaveApplicationController extends Controller
             'specified_remark' => $validatedData['specified_remark'],
             'within_philippines' => $validatedData['within_philippines'],
             'abroad' => $validatedData['abroad'],
-            // 'in_hospital' => $validatedData['in_hospital'],
-            // 'out_patient' => $validatedData['out_patient'],
+            'in_hospital' => $validatedData['in_hospital'],
+            'out_patient' => $validatedData['out_patient'],
+            'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
             // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
             // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);

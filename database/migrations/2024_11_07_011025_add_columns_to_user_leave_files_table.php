@@ -33,7 +33,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('user_leave_files', function (Blueprint $table) {
-            //
+            $table->dropColumn([
+                'operating_room_record_path',
+                'operating_room_record_filename',
+                'hospital_abstract_path',
+                'hospital_abstract_filename',
+                'discharge_summary_path',
+                'discharge_summary_filename',
+                'histopath_report_path',
+                'histopath_report_filename',
+                'fit_to_work_certification_path',
+                'fit_to_work_certification_filename',
+                'pre_adoptive_placement_authority_path',
+                'pre_adoptive_placement_authority_filename',
+            ]);
         });
     }
 };

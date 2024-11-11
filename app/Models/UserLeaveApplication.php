@@ -20,6 +20,7 @@ class UserLeaveApplication extends Model
         'out_patient',
         'completion_of_masters_degree',
         'bar_or_board_examination_review',
+        'half_days',
         'rejection_remark',
     ];
 
@@ -31,6 +32,7 @@ class UserLeaveApplication extends Model
         'paternity_balance',
         'vawc_leave_balance',
         'rehabilitation_leave_balance',
+        'special_leave_benefits_for_women_balance',
     ];
 
     public function getEmployeeInformationAttribute()
@@ -132,6 +134,25 @@ class UserLeaveApplication extends Model
 
         return $count;
     }
+    public function getSpecialLeaveBenefitsForWomenBalanceAttribute()
+    {
+        $toCount = UserLeaveApplication::where('leave_type', 'Special leave benefits for women')
+            ->where('employees_id', $this->employees_id)
+            ->where('status', 'approved')
+            ->whereYear('created_at', date('Y'))
+            ->get();
+
+        $count = 0;
+
+        foreach ($toCount as $item) {
+            // Decode the JSON array
+            $dates = json_decode($item->leave_dates, true); // true for associative array
+            $count += count($dates); // Count the number of dates in the array
+        }
+
+        return $count;
+    }
+
     public function employee()
     {
         return $this->belongsTo(SysEmployee::class, 'employees_id');
