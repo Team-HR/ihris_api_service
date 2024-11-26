@@ -137,8 +137,7 @@ class LeaveApplicationController extends Controller
     {
         // If $id is provided, filter by status and employee id
         if ($id !== null) {
-            $allData = UserLeaveApplication::where('status', $status)
-                ->where('employees_id', $id)
+            $allData = UserLeaveApplication::where('employees_id', $id)
                 ->orderBy('created_at', 'desc')
                 ->get();
         } else {
