@@ -22,6 +22,7 @@ class UserLeaveApplication extends Model
         'bar_or_board_examination_review',
         'half_days',
         'rejection_remark',
+        'SPL_type',
     ];
 
     protected $appends = [

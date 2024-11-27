@@ -100,10 +100,11 @@ class LeaveApplicationController extends Controller
             'half_days' => ['nullable', 'array'], // `half_days` can be null or an array
             'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
             'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
+            'SPL_type' => 'nullable|string',
         ]);
 
         $user = Auth::user();
-        $status = in_array('Leave_admin', $user->role) ? 'pending' : 'pending';
+        $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
         // If half_days is provided, encode it as a JSON string, else leave it null
 
 
@@ -119,6 +120,7 @@ class LeaveApplicationController extends Controller
             'in_hospital' => $validatedData['in_hospital'],
             'out_patient' => $validatedData['out_patient'],
             'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
+            'SPL_type' => $validatedData['SPL_type'],
             // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
             // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
