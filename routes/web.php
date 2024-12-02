@@ -7,9 +7,9 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LeaveApplicationController;
 
 Route::post('/auth/login', [AuthController::class, 'authenticate']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
+Route::get('/auth/fetch-user', [AuthController::class, 'fetchAuthenticatedUser']);
 
 require __DIR__ . '/leave_management_routes.php';
