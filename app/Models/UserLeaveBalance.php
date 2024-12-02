@@ -13,5 +13,6 @@ class UserLeaveBalance extends Model
         'sick_leave_balance',
     ];
 
+
     use HasFactory;
 }

@@ -23,6 +23,7 @@ class UserLeaveApplication extends Model
         'half_days',
         'rejection_remark',
         'SPL_type',
+        'maternity_leave_type',
     ];
 
     protected $appends = [
@@ -34,6 +35,7 @@ class UserLeaveApplication extends Model
         'vawc_leave_balance',
         'rehabilitation_leave_balance',
         'special_leave_benefits_for_women_balance',
+        'special_privilege_leave_balance',
     ];
 
     public function getEmployeeInformationAttribute()
@@ -138,6 +140,24 @@ class UserLeaveApplication extends Model
     public function getSpecialLeaveBenefitsForWomenBalanceAttribute()
     {
         $toCount = UserLeaveApplication::where('leave_type', 'Special leave benefits for women')
+            ->where('employees_id', $this->employees_id)
+            ->where('status', 'approved')
+            ->whereYear('created_at', date('Y'))
+            ->get();
+
+        $count = 0;
+
+        foreach ($toCount as $item) {
+            // Decode the JSON array
+            $dates = json_decode($item->leave_dates, true); // true for associative array
+            $count += count($dates); // Count the number of dates in the array
+        }
+
+        return $count;
+    }
+    public function getSpecialPrivilegeLeaveBalanceAttribute()
+    {
+        $toCount = UserLeaveApplication::where('leave_type', 'Special Privilege leave')
             ->where('employees_id', $this->employees_id)
             ->where('status', 'approved')
             ->whereYear('created_at', date('Y'))

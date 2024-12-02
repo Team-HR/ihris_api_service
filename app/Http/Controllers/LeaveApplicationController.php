@@ -91,7 +91,7 @@ class LeaveApplicationController extends Controller
             'leave_type' => 'required|string',
             'date_of_filing' => 'required|date',
             'leave_dates' => 'required|array', // Assuming it will be an array
-            'leave_dates.*' => 'date', // Each date in the array should be a valid date
+            // 'leave_dates.*' => 'date', // Each date in the array should be a valid date
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
@@ -101,6 +101,7 @@ class LeaveApplicationController extends Controller
             'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
             'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
             'SPL_type' => 'nullable|string',
+            'maternity_leave_type' => 'nullable|in:105,60',
         ]);
 
         $user = Auth::user();
@@ -121,6 +122,7 @@ class LeaveApplicationController extends Controller
             'out_patient' => $validatedData['out_patient'],
             'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
             'SPL_type' => $validatedData['SPL_type'],
+            'maternity_leave_type' => $validatedData['maternity_leave_type'],
             // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
             // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
