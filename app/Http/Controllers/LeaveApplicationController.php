@@ -6,6 +6,7 @@ use App\Models\SysEmployee;
 use App\Models\User;
 use App\Models\UserLeaveApplication;
 use App\Models\UserLeaveBalance;
+use App\Models\UserLeaveLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -240,5 +241,44 @@ class LeaveApplicationController extends Controller
 
         // Return the leave balance information
         return response()->json($leaveBalance ?? null);
+    }
+
+    /**
+     * 
+     * get leave balance with employees id {id} 
+     * 
+     * 
+     *  */
+    public function createLeaveLog(Request $request)
+    {
+        $validatedData = $request->validate([
+            'employees_id' => 'required|integer',
+            'leave_id' => 'required|integer',
+            'vl_total_earned' => 'numeric|nullable',
+            'vl_deduction' => 'numeric|nullable',
+            // 'vl_balance' => 'float|nullable',
+            'sl_total_earned' => 'numeric|nullable',
+            'sl_deduction' => 'numeric|nullable',
+            // 'sl_balance' => 'float|nullable',
+            'days_with_pay' => 'required|string',
+            'days_without_pay' => 'required|string',
+            'others' => 'required|string',
+        ]);
+
+        $createdData = UserLeaveLogs::create([
+            'employees_id' => $validatedData['employees_id'],
+            'leave_id' => $validatedData['leave_id'],
+            'vl_total_earned' => $validatedData['vl_total_earned'],
+            'vl_deduction' => $validatedData['vl_deduction'],
+            'vl_balance' => $validatedData['vl_total_earned'] - $validatedData['vl_deduction'],
+            'sl_total_earned' => $validatedData['sl_total_earned'],
+            'sl_deduction' => $validatedData['sl_deduction'],
+            'sl_balance' => $validatedData['sl_total_earned'] - $validatedData['sl_deduction'],
+            'days_with_pay' => $validatedData['days_with_pay'],
+            'days_without_pay' => $validatedData['days_without_pay'],
+            'others' => $validatedData['others'],
+        ]);
+
+        return response()->json($createdData);
     }
 }

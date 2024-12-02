@@ -12,6 +12,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/api/leave-management/get-leave-application/{id}', [LeaveApplicationController::class, 'getLeaveApplication']);
     Route::get('/api/leave-management/get-leave-balance/{id}', [LeaveApplicationController::class, 'getLeaveBalance']);
     Route::post('/api/leave-management/create-leave-application', [LeaveApplicationController::class, 'createLeaveApplication']);
+    Route::post('/api/leave-management/create-leave-log', [LeaveApplicationController::class, 'createLeaveLog']);
     Route::patch('/api/leave-management/patch-leave-application', [LeaveApplicationController::class, 'updateLeaveApplication']);
     // FILE SYSTEM BELOW
     Route::post('/api/leave-management/upload-file/vacation-leave', [LeaveApplicationFilerController::class, 'uploadLeaveRequirements']);

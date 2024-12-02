@@ -36,6 +36,7 @@ class UserLeaveApplication extends Model
         'rehabilitation_leave_balance',
         'special_leave_benefits_for_women_balance',
         'special_privilege_leave_balance',
+        'leave_log',
     ];
 
     public function getEmployeeInformationAttribute()
@@ -172,6 +173,15 @@ class UserLeaveApplication extends Model
         }
 
         return $count;
+    }
+
+    public function getLeaveLogAttribute()
+    {
+        $log = UserLeaveLogs::where('leave_id', $this->id)
+            ->where('employees_id', $this->employees_id)
+            ->get();
+
+        return $log;
     }
 
     public function employee()
