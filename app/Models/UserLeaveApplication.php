@@ -177,9 +177,7 @@ class UserLeaveApplication extends Model
 
     public function getLeaveLogAttribute()
     {
-        $log = UserLeaveLogs::where('leave_id', $this->id)
-            ->where('employees_id', $this->employees_id)
-            ->get();
+        $log = UserLeaveLogs::where('leave_id', $this->id)->first();
 
         return $log;
     }

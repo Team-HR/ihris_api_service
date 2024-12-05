@@ -106,16 +106,15 @@ class LeaveApplicationController extends Controller
         ]);
 
         $user = Auth::user();
-        $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
+        // $status = in_array('Leave_admin', $user->role) ? 'pending' : 'pending';
         // If half_days is provided, encode it as a JSON string, else leave it null
-
 
         $createdData = UserLeaveApplication::create([
             'employees_id' => $validatedData['employees_id'],
             'leave_type' => $validatedData['leave_type'],
             'date_of_filing' => $validatedData['date_of_filing'],
             'leave_dates' => json_encode($validatedData['leave_dates']),
-            'status' => $status,
+            'status' => 'pending',
             'specified_remark' => $validatedData['specified_remark'],
             'within_philippines' => $validatedData['within_philippines'],
             'abroad' => $validatedData['abroad'],
@@ -260,9 +259,9 @@ class LeaveApplicationController extends Controller
             'sl_total_earned' => 'numeric|nullable',
             'sl_deduction' => 'numeric|nullable',
             // 'sl_balance' => 'float|nullable',
-            'days_with_pay' => 'required|string',
-            'days_without_pay' => 'required|string',
-            'others' => 'required|string',
+            'days_with_pay' => 'nullable|string',
+            'days_without_pay' => 'nullable|string',
+            'others' => 'nullable|string',
         ]);
 
         $createdData = UserLeaveLogs::create([
