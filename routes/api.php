@@ -64,4 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
      * */
 
     Route::get('/pcr/{period_id}', [PcrController::class, 'getPcr']);
+    Route::get('/pcr/{period_id}/core', [PcrController::class, 'getCoreFunctions']);
+    Route::get('/pcr/{period_id}/pcr/getformtype', [PcrController::class, 'getFormType']);
+    Route::post('/pcr/{period_id}/pcr/formtype', [PcrController::class, 'saveFormType']);
+    Route::get('/pcr/{period_id}/pcr/getsignatories', [PcrController::class, 'getSignatories']);
+    Route::post('/pcr/{period_id}/pcr/signatories', [PcrController::class, 'saveSignatories']);
+    // 
 });

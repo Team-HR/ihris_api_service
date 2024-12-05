@@ -49,7 +49,8 @@ class SpmsSuccessIndicator extends Model
             if ($employee) {
                 $personnel[] = [
                     'employee_id' => $employee->employees_id,
-                    'full_name' => $employee->full_name
+                    'full_name' => $employee->full_name,
+                    'actual_accomplishment' => getActualAccomplishment($employee->employees_id, $this->mi_id)
                 ];
             }
         }
@@ -138,4 +139,11 @@ function checkIfNotEmpty($arr)
         }
     }
     return false;
+}
+
+function getActualAccomplishment($employees_id, $mi_id)
+{
+    if (!$employees_id && !$mi_id) return null;
+    $data = SpmsCoreFunctionData::where('empId', $employees_id)->where('p_id', $mi_id)->first();
+    return $data;
 }
