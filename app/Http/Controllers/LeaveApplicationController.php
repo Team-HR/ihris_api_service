@@ -137,8 +137,11 @@ class LeaveApplicationController extends Controller
      * 
      * 
      *  */
-    public function fetchLeaveApplications($status, $id = null)
+    public function fetchLeaveApplications(Request $request)
     {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
         // If $id is provided, filter by status and employee id
         if ($id !== null) {
             $allData = UserLeaveApplication::where('employees_id', $id)
@@ -148,7 +151,7 @@ class LeaveApplicationController extends Controller
             // If no $id, just filter by status
             $allData = UserLeaveApplication::where('status', $status)
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->paginate();
         }
 
         return response()->json($allData);
