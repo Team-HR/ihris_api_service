@@ -10,6 +10,7 @@ class UserLeaveLogs extends Model
     protected $fillable = [
         'employees_id',
         'leave_id',
+        'record_as_of',
         'vl_total_earned',
         'vl_deduction',
         'vl_balance',

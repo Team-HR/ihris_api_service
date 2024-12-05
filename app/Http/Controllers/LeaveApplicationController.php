@@ -253,6 +253,7 @@ class LeaveApplicationController extends Controller
         $validatedData = $request->validate([
             'employees_id' => 'required|integer',
             'leave_id' => 'required|integer',
+            'record_as_of' => 'required|string',
             'vl_total_earned' => 'numeric|nullable',
             'vl_deduction' => 'numeric|nullable',
             // 'vl_balance' => 'float|nullable',
@@ -267,6 +268,7 @@ class LeaveApplicationController extends Controller
         $createdData = UserLeaveLogs::create([
             'employees_id' => $validatedData['employees_id'],
             'leave_id' => $validatedData['leave_id'],
+            'record_as_of' => $validatedData['record_as_of'],
             'vl_total_earned' => $validatedData['vl_total_earned'],
             'vl_deduction' => $validatedData['vl_deduction'],
             'vl_balance' => $validatedData['vl_total_earned'] - $validatedData['vl_deduction'],
