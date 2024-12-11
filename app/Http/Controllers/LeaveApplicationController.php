@@ -91,7 +91,8 @@ class LeaveApplicationController extends Controller
             'employees_id' => 'required|integer', // Assuming users table
             'leave_type' => 'required|string',
             'date_of_filing' => 'required|date',
-            'leave_dates' => 'required|array', // Assuming it will be an array
+            'leave_dates' => 'array|nullable', // Assuming it will be an array
+            'leave_date_range' => 'json|nullable',
             // 'leave_dates.*' => 'date', // Each date in the array should be a valid date
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
@@ -114,6 +115,7 @@ class LeaveApplicationController extends Controller
             'leave_type' => $validatedData['leave_type'],
             'date_of_filing' => $validatedData['date_of_filing'],
             'leave_dates' => json_encode($validatedData['leave_dates']),
+            'leave_date_range' => $validatedData['leave_date_range'],
             'status' => 'pending',
             'specified_remark' => $validatedData['specified_remark'],
             'within_philippines' => $validatedData['within_philippines'],

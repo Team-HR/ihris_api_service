@@ -24,6 +24,7 @@ class UserLeaveApplication extends Model
         'rejection_remark',
         'SPL_type',
         'maternity_leave_type',
+        'leave_date_range',
     ];
 
     protected $appends = [
