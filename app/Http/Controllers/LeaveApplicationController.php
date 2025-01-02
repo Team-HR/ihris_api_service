@@ -104,6 +104,7 @@ class LeaveApplicationController extends Controller
             'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
             'SPL_type' => 'nullable|string',
             'maternity_leave_type' => 'nullable|in:105,60',
+            'immediate_supervisor' => 'required|string',
         ]);
 
         $createdData = UserLeaveApplication::create([
@@ -121,6 +122,7 @@ class LeaveApplicationController extends Controller
             'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
             'SPL_type' => $validatedData['SPL_type'],
             'maternity_leave_type' => $validatedData['maternity_leave_type'],
+            'immediate_supervisor' => $validatedData['immediate_supervisor'],
         ]);
 
         return response()->json($createdData);

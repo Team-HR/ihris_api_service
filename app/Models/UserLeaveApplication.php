@@ -25,6 +25,7 @@ class UserLeaveApplication extends Model
         'SPL_type',
         'maternity_leave_type',
         'leave_date_range',
+        'immediate_supervisor'
     ];
 
     protected $appends = [
