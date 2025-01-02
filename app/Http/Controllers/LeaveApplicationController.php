@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SpmsImmediateSupervisors;
+use App\Models\SpmsPerformanceReviewStatus;
 use App\Models\SysEmployee;
 use App\Models\User;
 use App\Models\UserLeaveApplication;
@@ -343,7 +343,7 @@ class LeaveApplicationController extends Controller
     public function getImmediateSupervisors()
     {
         // Get all immediate supervisors
-        $immediateSupervisorIds = SpmsImmediateSupervisors::all();
+        $immediateSupervisorIds = SpmsPerformanceReviewStatus::all();
 
         // Map through the supervisors to get the ImmediateSup or DepartmentHead
         $supervisors = $immediateSupervisorIds->map(function ($supervisor) {
@@ -376,10 +376,13 @@ class LeaveApplicationController extends Controller
             return $fullName;
         });
 
-        // Filter out any null values (supervisors with no valid ID or full_name)
+        // Filter out any null or empty values
         $supervisors = $supervisors->filter(function ($supervisor) {
-            return !is_null($supervisor);
+            return !is_null($supervisor) && $supervisor !== '';
         });
+
+        // Remove duplicates (if the same supervisor appears more than once)
+        $supervisors = $supervisors->unique();
 
         // Convert the collection to an array and return it
         return response()->json($supervisors->values()->toArray());
