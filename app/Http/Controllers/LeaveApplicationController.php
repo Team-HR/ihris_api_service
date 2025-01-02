@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SpmsImmediateSupervisors;
 use App\Models\SysEmployee;
 use App\Models\User;
 use App\Models\UserLeaveApplication;
@@ -93,7 +94,6 @@ class LeaveApplicationController extends Controller
             'date_of_filing' => 'required|date',
             'leave_dates' => 'array|nullable', // Assuming it will be an array
             'leave_date_range' => 'json|nullable',
-            // 'leave_dates.*' => 'date', // Each date in the array should be a valid date
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
@@ -105,10 +105,6 @@ class LeaveApplicationController extends Controller
             'SPL_type' => 'nullable|string',
             'maternity_leave_type' => 'nullable|in:105,60',
         ]);
-
-        $user = Auth::user();
-        // $status = in_array('Leave_admin', $user->role) ? 'pending' : 'pending';
-        // If half_days is provided, encode it as a JSON string, else leave it null
 
         $createdData = UserLeaveApplication::create([
             'employees_id' => $validatedData['employees_id'],
@@ -125,12 +121,61 @@ class LeaveApplicationController extends Controller
             'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
             'SPL_type' => $validatedData['SPL_type'],
             'maternity_leave_type' => $validatedData['maternity_leave_type'],
-            // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
-            // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
         ]);
 
         return response()->json($createdData);
     }
+    /**
+     * 
+     * update reverted leave application to database
+     * 
+     * 
+     *  */
+    public function updateRevertedLeaveApplication(Request $request)
+    {
+        $validatedData = $request->validate([
+            'application_to_update' => 'required|integer', // Assuming users table
+            'employees_id' => 'required|integer', // Assuming users table
+            'leave_type' => 'required|string',
+            'date_of_filing' => 'required|date',
+            'leave_dates' => 'array|nullable', // Assuming it will be an array
+            'leave_date_range' => 'json|nullable',
+            'specified_remark' => 'nullable|string',
+            'within_philippines' => 'nullable|boolean',
+            'abroad' => 'nullable|boolean',
+            'in_hospital' => 'nullable|boolean',
+            'out_patient' => 'nullable|boolean',
+            'half_days' => ['nullable', 'array'], // `half_days` can be null or an array
+            'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
+            'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
+            'SPL_type' => 'nullable|string',
+            'maternity_leave_type' => 'nullable|in:105,60',
+        ]);
+
+        // Find the leave application by its ID
+        $leaveApplication = UserLeaveApplication::findOrFail($validatedData['application_to_update']);
+
+        $leaveApplication->update([
+            'employees_id' => $validatedData['employees_id'],
+            'leave_type' => $validatedData['leave_type'],
+            'date_of_filing' => $validatedData['date_of_filing'],
+            'leave_dates' => isset($validatedData['leave_dates']) ? json_encode($validatedData['leave_dates']) : null,
+            'leave_date_range' => $validatedData['leave_date_range'] ?? null,
+            'status' => 'pending',
+            'specified_remark' => $validatedData['specified_remark'] ?? null,
+            'within_philippines' => $validatedData['within_philippines'] ?? null,
+            'abroad' => $validatedData['abroad'] ?? null,
+            'in_hospital' => $validatedData['in_hospital'] ?? null,
+            'out_patient' => $validatedData['out_patient'] ?? null,
+            'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
+            'SPL_type' => $validatedData['SPL_type'] ?? null,
+            'maternity_leave_type' => $validatedData['maternity_leave_type'] ?? null,
+        ]);
+
+        return response()->json($leaveApplication, 200);
+    }
+
+
 
 
     /**
@@ -170,7 +215,7 @@ class LeaveApplicationController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'status' => 'required|string|in:approved,rejected,pending',
+            'status' => 'required|string|in:approved,rejected,pending,reverted',
             'id' => 'required|integer',
             'rejection_remark' => 'string|nullable',
         ]);
@@ -287,5 +332,56 @@ class LeaveApplicationController extends Controller
         ]);
 
         return response()->json($createdData);
+    }
+
+    /**
+     * 
+     * get immediate supervisors
+     * 
+     * 
+     *  */
+    public function getImmediateSupervisors()
+    {
+        // Get all immediate supervisors
+        $immediateSupervisorIds = SpmsImmediateSupervisors::all();
+
+        // Map through the supervisors to get the ImmediateSup or DepartmentHead
+        $supervisors = $immediateSupervisorIds->map(function ($supervisor) {
+            // Check ImmediateSup first
+            $supervisorId = $supervisor->ImmediateSup;
+
+            // If ImmediateSup is null, fallback to DepartmentHead
+            if (is_null($supervisorId)) {
+                $supervisorId = $supervisor->DepartmentHead;
+            }
+
+            // If still null, return nothing (skip this supervisor)
+            if (is_null($supervisorId)) {
+                return null;
+            }
+
+            // Convert to integer if it's a numeric string
+            $convertedSupervisorId = is_numeric($supervisorId) ? (int) $supervisorId : $supervisorId;
+
+            // If it's a number, find the full_name from SysEmployee model
+            if (is_int($convertedSupervisorId)) {
+                $employee = SysEmployee::find($convertedSupervisorId);
+                $fullName = $employee ? $employee->full_name : null;
+            } else {
+                // If it's not a number (e.g., 'FULL_NAME'), we return the string itself as full name
+                $fullName = $convertedSupervisorId;
+            }
+
+            // Return the full_name or null
+            return $fullName;
+        });
+
+        // Filter out any null values (supervisors with no valid ID or full_name)
+        $supervisors = $supervisors->filter(function ($supervisor) {
+            return !is_null($supervisor);
+        });
+
+        // Convert the collection to an array and return it
+        return response()->json($supervisors->values()->toArray());
     }
 }
