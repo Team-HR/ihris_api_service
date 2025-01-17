@@ -88,6 +88,8 @@ class LeaveApplicationController extends Controller
      *  */
     public function createLeaveApplication(Request $request)
     {
+        $user = Auth::user();
+
         $validatedData = $request->validate([
             'employees_id' => 'required|integer', // Assuming users table
             'leave_type' => 'required|string',
@@ -107,10 +109,13 @@ class LeaveApplicationController extends Controller
             'immediate_supervisor' => 'required|string',
         ]);
 
+        $date_of_filing = in_array('Leave_admin', $user->role) ? $validatedData['date_of_filing'] : now();
+        $leave_applicant = in_array('Leave_admin', $user->role) ? $validatedData['employees_id'] : $user->id;
+
         $createdData = UserLeaveApplication::create([
-            'employees_id' => $validatedData['employees_id'],
+            'employees_id' => $leave_applicant,
             'leave_type' => $validatedData['leave_type'],
-            'date_of_filing' => $validatedData['date_of_filing'],
+            'date_of_filing' => $date_of_filing,
             'leave_dates' => json_encode($validatedData['leave_dates']),
             'leave_date_range' => $validatedData['leave_date_range'],
             'status' => 'pending',
