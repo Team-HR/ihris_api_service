@@ -28,7 +28,16 @@ class SysEmployee extends Model
         'full_name',
         'department',
         'position',
+        'selected'
     ];
+
+    public function getSelectedAttribute()
+    {
+        return [
+            'employee_id' => $this->employees_id,
+            'full_name' => $this->full_name,
+        ];
+    }
 
     public function getFullNameAttribute()
     {

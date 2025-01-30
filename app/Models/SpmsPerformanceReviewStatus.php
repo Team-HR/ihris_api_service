@@ -31,9 +31,36 @@ class SpmsPerformanceReviewStatus extends Model
 
 
     protected $appends = [
+        'ImmediateSupObj',
+        'DepartmentHeadObj',
         'department',
         'period'
     ];
+
+    public function getImmediateSupObjAttribute()
+    {
+
+        $emp = SysEmployee::find($this->ImmediateSup);
+        if ($emp) {
+            return $emp->selected;
+        }
+        return [
+            'employee_id' => null,
+            'full_name' => null,
+        ];
+    }
+
+    public function getDepartmentHeadObjAttribute()
+    {
+        $emp = SysEmployee::find($this->DepartmentHead);
+        if ($emp) {
+            return $emp->selected;
+        }
+        return [
+            'employee_id' => null,
+            'full_name' => null,
+        ];
+    }
 
     public function getDepartmentAttribute()
     {
