@@ -39,3 +39,4 @@ sail up -d
 2. NO NEED TO ADD NEW MIGRATIONS. Use only 3rd Party DMBS to add/edit or manage database. Use the existing `ihris` database.
 3. To use laravel's models to existing tables from `ihris` database. Read: https://laravel.com/docs/11.x/eloquent#table-names
 4. For more info on using laravel's eloquent read: https://laravel.com/docs/11.x/eloquent
+

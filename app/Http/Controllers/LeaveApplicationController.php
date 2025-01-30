@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SpmsPerformanceReviewStatus;
 use App\Models\SysEmployee;
 use App\Models\User;
 use App\Models\UserLeaveApplication;
 use App\Models\UserLeaveBalance;
+use App\Models\UserLeaveLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveApplicationController extends Controller
 {
@@ -85,41 +88,101 @@ class LeaveApplicationController extends Controller
      *  */
     public function createLeaveApplication(Request $request)
     {
+        $user = Auth::user();
+
         $validatedData = $request->validate([
             'employees_id' => 'required|integer', // Assuming users table
             'leave_type' => 'required|string',
             'date_of_filing' => 'required|date',
-            'leave_dates' => 'required|array', // Assuming it will be an array
-            'leave_dates.*' => 'date', // Each date in the array should be a valid date
+            'leave_dates' => 'array|nullable', // Assuming it will be an array
+            'leave_date_range' => 'json|nullable',
             'specified_remark' => 'nullable|string',
             'within_philippines' => 'nullable|boolean',
             'abroad' => 'nullable|boolean',
-            // 'in_hospital' => 'nullable|boolean',
-            // 'out_patient' => 'nullable|boolean',
-            // 'completion_of_masters_degree' => 'nullable|boolean',
-            // 'bar_or_board_examination_review' => 'nullable|boolean',
+            'in_hospital' => 'nullable|boolean',
+            'out_patient' => 'nullable|boolean',
+            'half_days' => ['nullable', 'array'], // `half_days` can be null or an array
+            'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
+            'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
+            'SPL_type' => 'nullable|string',
+            'maternity_leave_type' => 'nullable|in:105,60',
+            'immediate_supervisor' => 'required|string',
         ]);
 
-        $user = Auth::user();
-        $status = in_array('Leave_admin', $user->role) ? 'approved' : 'pending';
+        $date_of_filing = in_array('Leave_admin', $user->role) ? $validatedData['date_of_filing'] : now();
+        $leave_applicant = in_array('Leave_admin', $user->role) ? $validatedData['employees_id'] : $user->id;
 
         $createdData = UserLeaveApplication::create([
-            'employees_id' => $validatedData['employees_id'],
+            'employees_id' => $leave_applicant,
             'leave_type' => $validatedData['leave_type'],
-            'date_of_filing' => $validatedData['date_of_filing'],
+            'date_of_filing' => $date_of_filing,
             'leave_dates' => json_encode($validatedData['leave_dates']),
-            'status' => $status,
+            'leave_date_range' => $validatedData['leave_date_range'],
+            'status' => 'pending',
             'specified_remark' => $validatedData['specified_remark'],
             'within_philippines' => $validatedData['within_philippines'],
             'abroad' => $validatedData['abroad'],
-            // 'in_hospital' => $validatedData['in_hospital'],
-            // 'out_patient' => $validatedData['out_patient'],
-            // 'completion_of_masters_degree' => $validatedData['completion_of_masters_degree'],
-            // 'bar_or_board_examination_review' => $validatedData['bar_or_board_examination_review'],
+            'in_hospital' => $validatedData['in_hospital'],
+            'out_patient' => $validatedData['out_patient'],
+            'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
+            'SPL_type' => $validatedData['SPL_type'],
+            'maternity_leave_type' => $validatedData['maternity_leave_type'],
+            'immediate_supervisor' => $validatedData['immediate_supervisor'],
         ]);
 
         return response()->json($createdData);
     }
+    /**
+     * 
+     * update reverted leave application to database
+     * 
+     * 
+     *  */
+    public function updateRevertedLeaveApplication(Request $request)
+    {
+        $validatedData = $request->validate([
+            'application_to_update' => 'required|integer', // Assuming users table
+            'employees_id' => 'required|integer', // Assuming users table
+            'leave_type' => 'required|string',
+            'date_of_filing' => 'required|date',
+            'leave_dates' => 'array|nullable', // Assuming it will be an array
+            'leave_date_range' => 'json|nullable',
+            'specified_remark' => 'nullable|string',
+            'within_philippines' => 'nullable|boolean',
+            'abroad' => 'nullable|boolean',
+            'in_hospital' => 'nullable|boolean',
+            'out_patient' => 'nullable|boolean',
+            'half_days' => ['nullable', 'array'], // `half_days` can be null or an array
+            'half_days.*.date' => 'required_with:half_days|date', // Date must be provided if `half_days` is provided
+            'half_days.*.timeOfDay' => 'required_with:half_days|in:morning,afternoon', // Must be 'morning' or 'afternoon'
+            'SPL_type' => 'nullable|string',
+            'maternity_leave_type' => 'nullable|in:105,60',
+        ]);
+
+        // Find the leave application by its ID
+        $leaveApplication = UserLeaveApplication::findOrFail($validatedData['application_to_update']);
+
+        $leaveApplication->update([
+            'employees_id' => $validatedData['employees_id'],
+            'leave_type' => $validatedData['leave_type'],
+            'date_of_filing' => $validatedData['date_of_filing'],
+            'leave_dates' => isset($validatedData['leave_dates']) ? json_encode($validatedData['leave_dates']) : null,
+            'leave_date_range' => $validatedData['leave_date_range'] ?? null,
+            'status' => 'pending',
+            'specified_remark' => $validatedData['specified_remark'] ?? null,
+            'within_philippines' => $validatedData['within_philippines'] ?? null,
+            'abroad' => $validatedData['abroad'] ?? null,
+            'in_hospital' => $validatedData['in_hospital'] ?? null,
+            'out_patient' => $validatedData['out_patient'] ?? null,
+            'half_days' => $validatedData['half_days'] ? json_encode($validatedData['half_days']) : null,
+            'SPL_type' => $validatedData['SPL_type'] ?? null,
+            'maternity_leave_type' => $validatedData['maternity_leave_type'] ?? null,
+        ]);
+
+        return response()->json($leaveApplication, 200);
+    }
+
+
 
 
     /**
@@ -128,13 +191,26 @@ class LeaveApplicationController extends Controller
      * 
      * 
      *  */
-    public function fetchLeaveApplications($status)
+    public function fetchLeaveApplications(Request $request)
     {
-        $allData = UserLeaveApplication::where('status', $status)->orderBy('created_at', 'desc')->get();
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // If $id is provided, filter by status and employee id
+        if ($id !== null) {
+            $allData = UserLeaveApplication::where('employees_id', $id)
+                ->where('status', $status)
+                ->orderBy('created_at', 'desc')
+                ->paginate();
+        } else {
+            // If no $id, just filter by status
+            $allData = UserLeaveApplication::where('status', $status)
+                ->orderBy('created_at', 'desc')
+                ->paginate();
+        }
 
         return response()->json($allData);
     }
-
 
     /**
      * 
@@ -146,7 +222,7 @@ class LeaveApplicationController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'status' => 'required|string|in:approved,rejected,pending',
+            'status' => 'required|string|in:approved,rejected,pending,reverted',
             'id' => 'required|integer',
             'rejection_remark' => 'string|nullable',
         ]);
@@ -222,5 +298,100 @@ class LeaveApplicationController extends Controller
 
         // Return the leave balance information
         return response()->json($leaveBalance ?? null);
+    }
+
+    /**
+     * 
+     * get leave balance with employees id {id} 
+     * 
+     * 
+     *  */
+    public function createLeaveLog(Request $request)
+    {
+        $validatedData = $request->validate([
+            'employees_id' => 'required|integer',
+            'leave_id' => 'required|integer',
+            'record_as_of' => 'required|string',
+            'vl_total_earned' => 'numeric|nullable',
+            'vl_deduction' => 'numeric|nullable',
+            // 'vl_balance' => 'float|nullable',
+            'sl_total_earned' => 'numeric|nullable',
+            'sl_deduction' => 'numeric|nullable',
+            // 'sl_balance' => 'float|nullable',
+            'days_with_pay' => 'nullable|string',
+            'days_without_pay' => 'nullable|string',
+            'others' => 'nullable|string',
+        ]);
+
+        $createdData = UserLeaveLogs::create([
+            'employees_id' => $validatedData['employees_id'],
+            'leave_id' => $validatedData['leave_id'],
+            'record_as_of' => $validatedData['record_as_of'],
+            'vl_total_earned' => $validatedData['vl_total_earned'],
+            'vl_deduction' => $validatedData['vl_deduction'],
+            'vl_balance' => $validatedData['vl_total_earned'] - $validatedData['vl_deduction'],
+            'sl_total_earned' => $validatedData['sl_total_earned'],
+            'sl_deduction' => $validatedData['sl_deduction'],
+            'sl_balance' => $validatedData['sl_total_earned'] - $validatedData['sl_deduction'],
+            'days_with_pay' => $validatedData['days_with_pay'],
+            'days_without_pay' => $validatedData['days_without_pay'],
+            'others' => $validatedData['others'],
+        ]);
+
+        return response()->json($createdData);
+    }
+
+    /**
+     * 
+     * get immediate supervisors
+     * 
+     * 
+     *  */
+    public function getImmediateSupervisors()
+    {
+        // Get all immediate supervisors
+        $immediateSupervisorIds = SpmsPerformanceReviewStatus::all();
+
+        // Map through the supervisors to get the ImmediateSup or DepartmentHead
+        $supervisors = $immediateSupervisorIds->map(function ($supervisor) {
+            // Check ImmediateSup first
+            $supervisorId = $supervisor->ImmediateSup;
+
+            // If ImmediateSup is null, fallback to DepartmentHead
+            if (is_null($supervisorId)) {
+                $supervisorId = $supervisor->DepartmentHead;
+            }
+
+            // If still null, return nothing (skip this supervisor)
+            if (is_null($supervisorId)) {
+                return null;
+            }
+
+            // Convert to integer if it's a numeric string
+            $convertedSupervisorId = is_numeric($supervisorId) ? (int) $supervisorId : $supervisorId;
+
+            // If it's a number, find the full_name from SysEmployee model
+            if (is_int($convertedSupervisorId)) {
+                $employee = SysEmployee::find($convertedSupervisorId);
+                $fullName = $employee ? $employee->full_name : null;
+            } else {
+                // If it's not a number (e.g., 'FULL_NAME'), we return the string itself as full name
+                $fullName = $convertedSupervisorId;
+            }
+
+            // Return the full_name or null
+            return $fullName;
+        });
+
+        // Filter out any null or empty values
+        $supervisors = $supervisors->filter(function ($supervisor) {
+            return !is_null($supervisor) && $supervisor !== '';
+        });
+
+        // Remove duplicates (if the same supervisor appears more than once)
+        $supervisors = $supervisors->unique();
+
+        // Convert the collection to an array and return it
+        return response()->json($supervisors->values()->toArray());
     }
 }

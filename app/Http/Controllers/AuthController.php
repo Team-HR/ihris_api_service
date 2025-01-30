@@ -36,9 +36,16 @@ class AuthController extends Controller
         // ])->onlyInput('email');
     }
 
+    function fetchAuthenticatedUser()
+    {
+        return Auth::user();
+    }
+
 
     function logout()
     {
         Auth::logout();
+
+        return response(["message" => "User logged out"], 200);
     }
 }
