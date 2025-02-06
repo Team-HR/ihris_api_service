@@ -35,8 +35,24 @@ class SpmsSuccessIndicator extends Model
         'efficiency',
         'has_timeliness',
         'timeliness',
-        'personnel'
+        'personnel',
+        'perf_measures'
     ];
+
+
+    public function getPerfMeasuresAttribute()
+    {
+        $data = [];
+        
+        $attributes = [
+            'Quality' => $this->has_quality,
+            'Efficiency' => $this->has_efficiency,
+            'Timeliness' => $this->has_timeliness,
+        ];
+        
+        $data = array_keys(array_filter($attributes));
+        return $data;
+    }
 
     public function getPersonnelAttribute()
     {
