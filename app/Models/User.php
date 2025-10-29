@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $connection = 'mariadb';
+    // mariadb
     // use HasApiTokens, 
     use HasFactory, Notifiable;
 

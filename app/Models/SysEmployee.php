@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SysEmployee extends Model
 {
+
     /**
      * The table associated with the model.
      *

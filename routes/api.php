@@ -21,6 +21,12 @@ Route::get('/user', function (Request $request) {
  * 
  * */
 
+
+Route::get('/test', function(){
+    return "test";
+});
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getAllEmployees', [SysEmployeeController::class, 'getAllEmployees']);
 });
