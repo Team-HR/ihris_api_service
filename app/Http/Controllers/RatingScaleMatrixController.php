@@ -31,9 +31,8 @@ class RatingScaleMatrixController extends Controller
         $dep_id = getAuthPersonnelDepartmentId($mfo_periodId);
         $cf_count = $request->cf_count;
         $cf_title = $request->cf_title;
-
+        // return $request->all();
         $mfo = new SpmsCoreFunction();
-
         $mfo->mfo_periodId = $mfo_periodId;
         $mfo->parent_id = $parent_id;
         $mfo->dep_id = $dep_id;
@@ -104,6 +103,7 @@ class RatingScaleMatrixController extends Controller
      * update MFO title and/or cf_count
      * 
      */
+
     public function updateMfo(Request $request, $cf_ID)
     {
         $mfo = SpmsCoreFunction::find($cf_ID);
@@ -128,8 +128,6 @@ class RatingScaleMatrixController extends Controller
 
     public function getRatingScaleMatrixTitle($period_id)
     {
-
-
         $user = Auth::user();
         $employee_id = $user->employees_id;
 
@@ -143,7 +141,6 @@ class RatingScaleMatrixController extends Controller
          */
 
         $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
-
 
         if ($pcrStatus) {
             $department = $pcrStatus->department;
@@ -242,7 +239,7 @@ class RatingScaleMatrixController extends Controller
         $new_parent_id = $request->new_parent_id;
 
         $mfo = SpmsCoreFunction::find($cf_ID);
-        $mfo->parent_id = $new_parent_id;
+        $mfo->parent_id = $new_parent_id ? $new_parent_id : '';
         $mfo->save();
 
         // Attempt to save the model
@@ -254,7 +251,71 @@ class RatingScaleMatrixController extends Controller
             return response()->json(['message' => 'Failed to move record.'], 500);
         }
     }
+
+
+
+    public function getIndividualRatingScaleMatrix($period_id)
+    {
+        $user = Auth::user();
+        $employee_id = $user->employees_id;
+
+        // $period_id = $request->period_id;
+
+        /**
+         * department_id from spms_performancereviewstatus table
+         * if no spms_performancereviewstatus, 
+         * current user employee's department_id from
+         * employees table is used
+         */
+
+        $pcrStatus = SpmsPerformanceReviewStatus::where('employees_id', $employee_id)->where('period_id', $period_id)->first();
+
+
+        if ($pcrStatus) {
+            $department = $pcrStatus->department;
+        } else {
+            $department = $user->employee_information->department;
+        }
+
+
+        return getPersonnelCores($period_id, $department->department_id);
+
+        // return [
+        //     'rows' => getPersonnelCores($period_id, $department->department_id),
+        // ];
+    }
 }
+
+
+function getPersonnelCores($period_id, $department_id)
+{
+    $topMfos = SpmsCoreFunction::where('parent_id', '')->where('mfo_periodId', $period_id)->where('dep_id', $department_id)->orderBy('cf_count')->get();
+    $rows = [];
+
+    foreach ($topMfos as $key => $topMfo) {
+        $indent = 0;
+        $topMfo['indent'] = $indent;
+        $topMfo['is_mfo'] = true;
+        // check if has success indicators
+        $success_indicators = SpmsSuccessIndicator::where('cf_ID', $topMfo->cf_ID)->get();
+        $num_si = count($success_indicators);
+        $topMfo['has_si'] = $num_si > 0 ? true : false;
+        $topMfo['num_si'] = $num_si;
+        $topMfo['success_indicators'] = $success_indicators;
+        $rows[] = $topMfo;
+        //append each success indicators to rows
+        // if ($topMfo['has_si']) {
+        //     foreach ($success_indicators as $s => $si) {
+        //         $si['is_si'] = true;
+        //         $rows[] = $si;
+        //     }
+        // }
+        $rows = getChildren($rows, $topMfo->cf_ID, $indent);
+    }
+
+    return $rows;
+}
+
 
 /**
  * 

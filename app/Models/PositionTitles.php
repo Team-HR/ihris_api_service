@@ -17,6 +17,7 @@ class PositionTitles extends Model
         'level',
         'category',
         'salaryGrade',
+        'salaryGradetest',
     ];
 
     use HasFactory;

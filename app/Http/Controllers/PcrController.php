@@ -11,7 +11,6 @@ class PcrController extends Controller
     {
         $employee_id = $request->user()->employees_id;
         $pcr = SpmsPerformanceReviewStatus::where('period_id', $period_id)->where('employees_id', $employee_id)->first();
-
         return $pcr;
     }
 
@@ -110,7 +109,7 @@ class PcrController extends Controller
                         if (count($success_indicator["personnel"]) > 0) {
                             foreach ($success_indicator["personnel"] as $personnel) {
                                 if ($personnel["employee_id"] == $employee_id) {
-                                    
+
                                     $mfoExists = false;
                                     // check $rows if mfo already exist if so, mfo is a parent of the following si
                                     foreach ($rows as $key => $row) {

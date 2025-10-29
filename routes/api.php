@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
  * */
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::post('/getPeriodId', function (Request $request) {
         $selectedPeriod =  $request->selectedPeriod;
         $selectedYear =  $request->selectedYear;
@@ -47,15 +48,21 @@ Route::middleware('auth:sanctum')->group(function () {
      * */
 
     Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle']);
+    #get rsm rows (/api/rsm/<id>)
     Route::get('/rsm/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrix']);
+
     Route::post('/mfo', [RatingScaleMatrixController::class, 'addNewMfo']);
     Route::post('/mfo/sub', [RatingScaleMatrixController::class, 'addNewSubMfo']);
     Route::patch('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'updateMfo']);
     Route::delete('/mfo/{cf_ID}', [RatingScaleMatrixController::class, 'deleteMfo']);
+    #get mfos, used for listing mfos for moving to new parent
     Route::post('/getRsmMfos', [RatingScaleMatrixController::class, 'getRatingScaleMatrixMfosOnly']);
+    #move mfo to new parent
     Route::post('/moveMfoToNewParent', [RatingScaleMatrixController::class, 'moveMfoToNewParent']);
     Route::post('/si/saveEdit', [SuccessIndicatorController::class, 'saveSuccessIndicator']);
     Route::delete('/si/{id}', [SuccessIndicatorController::class, 'deleteSuccessIndicator']);
+    Route::post('/si/save', [SuccessIndicatorController::class, 'saveSiToEdit']);
+    Route::get('/si/{id}', [SuccessIndicatorController::class, 'getSuccessIndicator']);
 
     /**
      * 
@@ -64,7 +71,9 @@ Route::middleware('auth:sanctum')->group(function () {
      * */
 
     Route::get('/pcr/{period_id}', [PcrController::class, 'getPcr']);
-    Route::get('/pcr/{period_id}/core', [PcrController::class, 'getCoreFunctions']);
+    // Route::get('/pcr/{period_id}/core', [PcrController::class, 'getCoreFunctions']);
+    Route::get('/pcr/{period_id}/core', [RatingScaleMatrixController::class, 'getIndividualRatingScaleMatrix']);
+
     Route::get('/pcr/{period_id}/pcr/getformtype', [PcrController::class, 'getFormType']);
     Route::post('/pcr/{period_id}/pcr/formtype', [PcrController::class, 'saveFormType']);
     Route::get('/pcr/{period_id}/pcr/getsignatories', [PcrController::class, 'getSignatories']);

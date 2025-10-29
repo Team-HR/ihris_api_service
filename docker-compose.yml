@@ -10,7 +10,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${API_PORT:-89}:80'
+            - '${API_PORT:-90}:80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -23,12 +23,14 @@ services:
             - sail
         depends_on:
             - redis
+        restart:
+            'always'
     
     redis:
         container_name: '${CONTAINER_REDIS_NAME:-ihris_redis}'
         image: 'redis:alpine'
         ports:
-            - '${REDIS_PORT:-6379}:6379'
+            - '${REDIS_PORT:-6386}:6379'
         volumes:
             - 'sail-redis:/data'
         networks:
@@ -40,7 +42,8 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-
+        restart:
+            'always'
 networks:
     sail:
         driver: bridge

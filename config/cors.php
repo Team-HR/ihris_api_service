@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL'), env('HRIS_V2_FRONTEND_URL'), '*'],
+    'allowed_origins' => [env('FRONTEND_URL'), env('HRIS_V2_FRONTEND_URL'), 'http://192.168.11.42:3000'],
 
     'allowed_origins_patterns' => [],
 
