@@ -12,7 +12,6 @@ class CoreFunction extends Model
 
     // Specify the connection to the new database
     protected $connection = 'ihris_v2';
-    protected $table = 'core_functions';
 
     // Mass-assignable columns
     protected $fillable = [

@@ -12,7 +12,7 @@ class MfoPeriod extends Model
     use SoftDeletes, HasFactory;
 
     protected $connection = 'ihris_v2';
-    protected $table = 'mfo_periods';
+    
     protected $fillable = [
         'id',
         'semester',
