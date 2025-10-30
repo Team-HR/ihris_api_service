@@ -17,8 +17,9 @@ class DepartmentSeeder extends Seeder
         $departments = SysDepartment::all();
 
         foreach($departments as $dept){
-            Department::create([
-                'id' => $dept->id,
+            Department::updateOrCreate(
+            ['id' => $dept->id,],
+            [
                 'parent_id' => $dept->parent_department_id,
                 'name' => $dept->department,
                 'alias' => $dept->alias,

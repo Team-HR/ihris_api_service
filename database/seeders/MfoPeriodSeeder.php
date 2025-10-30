@@ -17,9 +17,10 @@ class MfoPeriodSeeder extends Seeder
         $mfos = SpmsMfoPeriod::all();
 
         foreach($mfos as $period){
-            MfoPeriod::create([
-                'id' => $period->mfoperiod_id,
-                'month' => $period->month_mfo,
+            MfoPeriod::updateOrCreate(
+            ['id' => $period->mfoperiod_id,],
+            [
+                'semester' => $period->month_mfo == 'January - June' ? 1 : 2,
                 'year' => $period->year_mfo,
             ]);
         }

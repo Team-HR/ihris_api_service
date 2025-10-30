@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mfo_periods', function (Blueprint $table) {
             $table->id();
-            $table->string('month');
+            $table->string('semester');
             $table->string('year');
             $table->softDeletes();
             $table->timestamps();

@@ -11,6 +11,7 @@ class Department extends Model
     use HasFactory, SoftDeletes;
 
     protected $connection = 'ihris_v2';
+    protected $table = 'departments';
     protected $fillable = [
         'id',
         'parent_id',

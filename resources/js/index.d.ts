@@ -1,6 +1,6 @@
 export interface MfoFunction {
     id: number;
-    month: string;
+    semester: 1 | 2;
     year: string;
 }
 

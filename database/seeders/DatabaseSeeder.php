@@ -13,21 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        User::factory()
-            ->count(3)
-            ->create();
-
-//             name
-// email
-// email_verified_at
-// password
-// remember_token
+        $this->call(MfoPeriodSeeder::class);
+        $this->call(DepartmentSeeder::class);
+        $this->call(CoreFunctionSeeder::class);
     }
 }
