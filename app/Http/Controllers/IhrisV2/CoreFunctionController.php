@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 
 class CoreFunctionController extends Controller
 {
-    public function getAllCoreFunction (){
-        return CoreFunction::all();
+    public function getCoreFunctions($mfoPeriodId, $departmentId){
+        $coreFunctions = CoreFunction::where('mfo_period_id',$mfoPeriodId)->where('department_id',$departmentId)->get();
+
+        return $coreFunctions;
     }
 }

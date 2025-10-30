@@ -1,26 +1,35 @@
-type CoreFunctionLevel1 = "mfoPeriod" | "department" | "parent" | "children";
-type CoreFunctionLevel2 =
-    | CoreFunctionLevel1
-    | `parent.${CoreFunctionLevel1}`
-    | `children.${CoreFunctionLevel1}`;
+// type CoreFunctionLevel1 = "mfoPeriod" | "department" | "parent" | "children";
+// type CoreFunctionLevel2 =
+//     | CoreFunctionLevel1
+//     | `parent.${CoreFunctionLevel1}`
+//     | `children.${CoreFunctionLevel1}`;
 
-type CoreFunctionRelations = CoreFunctionLevel2;
+// type CoreFunctionRelations = CoreFunctionLevel2;
 
-type MfoRelation = "coreFunctions" | `coreFunctions.${CoreFunctionRelations}`;
+// type MfoRelation = "coreFunctions" | `coreFunctions.${CoreFunctionRelations}`;
 
-const mfos = {
-    all: "/ihris_v2/mfos",
+// const mfos = {
+//     all: "/api/ihris_v2/mfos",
 
-    show: (mfoId: number | string, withRelations?: MfoRelation[]) => {
-        if (!withRelations || withRelations.length === 0)
-            return `/ihris_v2/mfos/${mfoId}`;
+//     show: (
+//         mfoPeriodId: number | string,
+//         departmentId: number | string,
+//         withRelations?: MfoRelation[]
+//     ) => {
+//         if (!withRelations || withRelations.length === 0)
+//             return `/api/ihris_v2/mfos/${mfoPeriodId}`;
 
-        const params = withRelations
-            .map((rel) => `with[]=${encodeURIComponent(rel)}`)
-            .join("&");
+//         const params = withRelations
+//             .map((rel) => `with[]=${encodeURIComponent(rel)}`)
+//             .join("&");
 
-        return `/ihris_v2/mfos/${mfoId}?${params}`;
-    },
+//         return `/api/ihris_v2/mfos/${mfoPeriodId}?${params}/departments/${departmentId}`;
+//     },
+// };
+
+const coreFunction = {
+    show: (mfoPeriodId: string | number, departmentId: string | number) =>
+        `/api/ihris_v2/mfo-periods/${mfoPeriodId}/departments/${departmentId}`,
 };
 
-export const routes = { mfos };
+export const routes = { coreFunction };

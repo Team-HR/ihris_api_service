@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -23,7 +24,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/test', function(){
-    return "test";
+    return __DIR__;
 });
 
 
@@ -86,3 +87,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pcr/{period_id}/pcr/signatories', [PcrController::class, 'saveSignatories']);
     // 
 });
+
+
+require __DIR__ . '/ihris_v2.php';
