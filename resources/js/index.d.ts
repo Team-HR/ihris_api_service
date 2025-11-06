@@ -34,8 +34,19 @@ export interface SuccessIndicator {
     indicator: string;
     core_function?: CoreFunction;
     users?: User[];
+    quality_measures?: QualityMeasure[];
+    deleted_at?: string | null;
 }
 
 export interface User {
     success_indicators?: SuccessIndicator[];
+}
+
+export interface QualityMeasure {
+    id: number;
+    success_indicator_id: number;
+    measure: string;
+    score: number;
+    deleted_at?: string | null;
+    success_indicator?: SuccessIndicator;
 }

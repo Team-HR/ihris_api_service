@@ -5,6 +5,8 @@ namespace App\Models\IhrisV2;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SuccessIndicator extends Model
@@ -23,7 +25,7 @@ class SuccessIndicator extends Model
         return $this->belongsTo(CoreFunction::class);
     }
 
-    public function users()
+    public function users():BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -31,5 +33,10 @@ class SuccessIndicator extends Model
             'success_indicator_id',
             'user_id'
         )->usingConnection('ihris_v2');
+    }
+
+    public function qualityMeasures():HasMany
+    {
+        return $this->hasMany(QualityMeasure::class);
     }
 }

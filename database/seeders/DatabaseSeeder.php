@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MfoPeriodSeeder::class);
         $this->call(DepartmentSeeder::class);
         $this->call(CoreFunctionSeeder::class);
+        $this->call(SuccessIndicatorUserSeeder::class);
+        $this->call(QualityMeasureSeeder::class);
     }
 }
