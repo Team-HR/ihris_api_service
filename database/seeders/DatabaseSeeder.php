@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\IhrisV2\TimelinessMeasure;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SuccessIndicatorUserSeeder::class);
         $this->call(QualityMeasureSeeder::class);
         $this->call(EfficiencyMeasureSeeder::class);
+        $this->call(TimelinessMeasure::class);
     }
 }

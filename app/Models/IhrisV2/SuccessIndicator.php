@@ -44,4 +44,9 @@ class SuccessIndicator extends Model
     {
         return $this->hasMany(EfficiencyMeasure::class);
     }
+
+    public function timelinessMeasures():HasMany
+    {
+        return $this->hasMany(TimelinessMeasure::class);
+    }
 }
