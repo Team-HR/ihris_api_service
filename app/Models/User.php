@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\IhrisV2\SuccessIndicator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -86,5 +88,15 @@ class User extends Authenticatable
     public function getRoleAttribute(): array
     {
         return explode(',', $this->attributes['type']);
+    }
+
+    public function successIndicators()
+    {
+        return $this->belongsToMany(
+            SuccessIndicator::class,
+            'success_indicator_user', // pivot table in ihris_v2
+            'user_id',
+            'success_indicator_id'
+        )->usingConnection('ihris_v2');
     }
 }

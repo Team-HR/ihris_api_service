@@ -33,4 +33,9 @@ export interface SuccessIndicator {
     core_function_id: number;
     indicator: string;
     core_function?: CoreFunction;
+    users?: User[];
+}
+
+export interface User {
+    success_indicators?: SuccessIndicator[];
 }
