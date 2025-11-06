@@ -39,4 +39,9 @@ class SuccessIndicator extends Model
     {
         return $this->hasMany(QualityMeasure::class);
     }
+
+    public function efficiencyMeasures():HasMany
+    {
+        return $this->hasMany(EfficiencyMeasure::class);
+    }
 }
