@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SpmsSuccessIndicator extends Model
 {
     // use HasFactory;
-
+    protected $connection = 'mariadb';
     /**
      * The table associated with the model.
      *

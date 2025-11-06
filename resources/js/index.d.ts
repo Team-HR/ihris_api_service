@@ -25,4 +25,12 @@ export interface CoreFunction {
     deleted_at?: string | null;
     parent?: CoreFunction;
     children?: CoreFunction[];
+    success_indicators?: SuccessIndicator[];
+}
+
+export interface SuccessIndicator {
+    id: number;
+    core_function_id: number;
+    indicator: string;
+    core_function?: CoreFunction;
 }

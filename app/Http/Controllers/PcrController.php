@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SpmsPerformanceReviewStatus;
+use App\Models\SpmsStrategicFunction;
 use Illuminate\Http\Request;
 
 class PcrController extends Controller
@@ -12,6 +13,11 @@ class PcrController extends Controller
         $employee_id = $request->user()->employees_id;
         $pcr = SpmsPerformanceReviewStatus::where('period_id', $period_id)->where('employees_id', $employee_id)->first();
         return $pcr;
+    }
+
+    public function getStrategic($period_id, $employeesId) {
+        $strat = SpmsStrategicFunction::where('period_id', $period_id)->where('emp_id', $employeesId)->first();      
+        return [$period_id, $employeesId, $strat];
     }
 
     // FORMTYPE START

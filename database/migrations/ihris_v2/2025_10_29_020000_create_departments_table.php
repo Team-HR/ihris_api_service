@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::connection('ihris_v2')->create('departments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id')
                 ->nullable()

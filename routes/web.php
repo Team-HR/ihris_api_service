@@ -13,4 +13,4 @@ Route::post('/auth/logout', [AuthController::class, 'logout']);
 Route::get('/auth/fetch-user', [AuthController::class, 'fetchAuthenticatedUser']);
 
 require __DIR__ . '/leave_management_routes.php';
-require __DIR__ . '/ihris_v2.php';
+

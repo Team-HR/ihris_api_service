@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SpmsCoreFunction extends Model
 {
     // use HasFactory;
+    protected $connection = 'mariadb';
     /**
      * The table associated with the model.
      *

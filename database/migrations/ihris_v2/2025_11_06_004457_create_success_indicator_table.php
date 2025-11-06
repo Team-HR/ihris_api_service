@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('ihris_v2')->create('mfo_periods', function (Blueprint $table) {
+        Schema::connection('ihris_v2')->create('success_indicators', function (Blueprint $table) {
             $table->id();
-            $table->string('semester');
-            $table->string('year');
+            $table->foreignId('core_function_id')
+                ->constrained('core_functions')
+                ->cascadeOnDelete();   
+            $table->text('indicator');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mfo_periods');
+        Schema::dropIfExists('success_indicator');
     }
 };

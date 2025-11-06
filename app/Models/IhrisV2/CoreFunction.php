@@ -4,6 +4,7 @@ namespace App\Models\IhrisV2;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CoreFunction extends Model
@@ -52,5 +53,11 @@ class CoreFunction extends Model
     public function children()
     {
         return $this->hasMany(CoreFunction::class, 'parent_id');
+    }
+
+    
+    public function successIndicators():HasMany
+    {
+        return $this->hasMany(SuccessIndicator::class);
     }
 }

@@ -85,6 +85,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pcr/{period_id}/pcr/formtype', [PcrController::class, 'saveFormType']);
     Route::get('/pcr/{period_id}/pcr/getsignatories', [PcrController::class, 'getSignatories']);
     Route::post('/pcr/{period_id}/pcr/signatories', [PcrController::class, 'saveSignatories']);
+    
+    
+    Route::get('/pcr/{period_id}/strategic/{employeesId}', [PcrController::class, 'getStrategic']);
     // 
 });
 
