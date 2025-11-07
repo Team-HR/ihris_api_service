@@ -14,18 +14,25 @@ class SuccessIndicator extends Model
     use SoftDeletes;
 
     protected $connection = 'ihris_v2';
+
     protected $fillable = [
         'core_function_id',
         'indicator',
     ];
 
+    // 👇 Automatically load these relationships whenever SuccessIndicator is queried
+    protected $with = [
+        'qualityMeasures',
+        'efficiencyMeasures',
+        'timelinessMeasures',
+    ];
 
-    public function coreFunction():BelongsTo
+    public function coreFunction(): BelongsTo
     {
         return $this->belongsTo(CoreFunction::class);
     }
 
-    public function users():BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -35,17 +42,17 @@ class SuccessIndicator extends Model
         )->usingConnection('ihris_v2');
     }
 
-    public function qualityMeasures():HasMany
+    public function qualityMeasures(): HasMany
     {
         return $this->hasMany(QualityMeasure::class);
     }
 
-    public function efficiencyMeasures():HasMany
+    public function efficiencyMeasures(): HasMany
     {
         return $this->hasMany(EfficiencyMeasure::class);
     }
 
-    public function timelinessMeasures():HasMany
+    public function timelinessMeasures(): HasMany
     {
         return $this->hasMany(TimelinessMeasure::class);
     }

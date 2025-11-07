@@ -32,4 +32,9 @@ const coreFunction = {
         `/api/ihris_v2/mfo-periods/${mfoPeriodId}/departments/${departmentId}`,
 };
 
-export const routes = { coreFunction };
+const successIndicators = {
+    show: (userId: string | number) =>
+        `/api/ihris_v2/users/${userId}/success-indicators`,
+};
+
+export const routes = { coreFunction, successIndicators };

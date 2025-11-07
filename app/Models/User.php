@@ -90,13 +90,15 @@ class User extends Authenticatable
         return explode(',', $this->attributes['type']);
     }
 
-    public function successIndicators()
+   public function successIndicators()
     {
         return $this->belongsToMany(
             SuccessIndicator::class,
-            'success_indicator_user', // pivot table in ihris_v2
+            'success_indicator_user',
             'user_id',
             'success_indicator_id'
-        )->usingConnection('ihris_v2');
+        )->withTimestamps()
+        ->setConnection('ihris_v2'); 
     }
+
 }

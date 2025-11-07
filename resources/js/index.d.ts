@@ -35,6 +35,8 @@ export interface SuccessIndicator {
     core_function?: CoreFunction;
     users?: User[];
     quality_measures?: QualityMeasure[];
+    efficiency_measures?: EfficiencyMeasure[];
+    timeliness_measure?: TimelinessMeasure[];
     deleted_at?: string | null;
 }
 
@@ -43,6 +45,24 @@ export interface User {
 }
 
 export interface QualityMeasure {
+    id: number;
+    success_indicator_id: number;
+    measure: string;
+    score: number;
+    deleted_at?: string | null;
+    success_indicator?: SuccessIndicator;
+}
+
+export interface EfficiencyMeasure {
+    id: number;
+    success_indicator_id: number;
+    measure: string;
+    score: number;
+    deleted_at?: string | null;
+    success_indicator?: SuccessIndicator;
+}
+
+export interface TimelinessMeasure {
     id: number;
     success_indicator_id: number;
     measure: string;
