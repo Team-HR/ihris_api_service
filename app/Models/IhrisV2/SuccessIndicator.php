@@ -32,16 +32,6 @@ class SuccessIndicator extends Model
         return $this->belongsTo(CoreFunction::class);
     }
 
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            User::class,
-            'success_indicator_user',
-            'success_indicator_id',
-            'user_id'
-        )->usingConnection('ihris_v2');
-    }
-
     public function qualityMeasures(): HasMany
     {
         return $this->hasMany(QualityMeasure::class);
@@ -56,4 +46,10 @@ class SuccessIndicator extends Model
     {
         return $this->hasMany(TimelinessMeasure::class);
     }
+
+    public function successIndicatorUsers()
+    {
+        return $this->hasMany(SuccessIndicatorUser::class, 'success_indicator_id');
+    }
+
 }

@@ -33,7 +33,7 @@ class EfficiencyMeasureSeeder extends Seeder
 
             foreach ($efficiencyData as $index => $value) {
                 if (!empty($value)) {
-                    EfficiencyMeasure::updateOrCreate(
+                    EfficiencyMeasure::firstOrCreate(
                         [
                             'success_indicator_id' => $indicator->id,
                             'score' => $index, // uniquely identify by indicator + score

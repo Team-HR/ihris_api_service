@@ -63,7 +63,7 @@ class RatingScaleMatrixController extends Controller
 
         /**
          * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
+         * if no spms_performancereviewstatus,
          * current user employee's department_id from
          * employees table is used
          */
@@ -99,9 +99,9 @@ class RatingScaleMatrixController extends Controller
 
 
     /**
-     * 
+     *
      * update MFO title and/or cf_count
-     * 
+     *
      */
 
     public function updateMfo(Request $request, $cf_ID)
@@ -120,10 +120,10 @@ class RatingScaleMatrixController extends Controller
 
 
     /**
-     * 
+     *
      *  Get RSM Title
      *  and Period
-     * 
+     *
      * */
 
     public function getRatingScaleMatrixTitle($period_id)
@@ -135,7 +135,7 @@ class RatingScaleMatrixController extends Controller
 
         /**
          * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
+         * if no spms_performancereviewstatus,
          * current user employee's department_id from
          * employees table is used
          */
@@ -157,10 +157,10 @@ class RatingScaleMatrixController extends Controller
     }
 
     /**
-     * 
+     *
      * Get Cascaded MFOs list
      * for changing mfo parent
-     * 
+     *
      * */
     public function getRatingScaleMatrixMfosOnly(Request $request)
     {
@@ -173,7 +173,7 @@ class RatingScaleMatrixController extends Controller
 
         /**
          * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
+         * if no spms_performancereviewstatus,
          * current user employee's department_id from
          * employees table is used
          */
@@ -206,7 +206,7 @@ class RatingScaleMatrixController extends Controller
 
         /**
          * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
+         * if no spms_performancereviewstatus,
          * current user employee's department_id from
          * employees table is used
          */
@@ -227,10 +227,10 @@ class RatingScaleMatrixController extends Controller
 
 
     /**
-     * 
-     *  Move MFO to 
+     *
+     *  Move MFO to
      *  new parent MFO
-     * 
+     *
      * */
 
     public function moveMfoToNewParent(Request $request)
@@ -263,7 +263,7 @@ class RatingScaleMatrixController extends Controller
 
         /**
          * department_id from spms_performancereviewstatus table
-         * if no spms_performancereviewstatus, 
+         * if no spms_performancereviewstatus,
          * current user employee's department_id from
          * employees table is used
          */
@@ -318,14 +318,14 @@ function getPersonnelCores($period_id, $department_id)
 
 
 /**
- * 
+ *
  * # get top mfos with no parents
- * $sql = "SELECT * from spms_corefunctions where parent_id='' and 
+ * $sql = "SELECT * from spms_corefunctions where parent_id='' and
  * mfo_periodId='$period_id' and dep_id='$dep_id' ORDER BY `spms_corefunctions`.`cf_count` ASC ";
  * get top mfos with no parents
- * $sql = "SELECT * from spms_corefunctions where parent_id='' and 
+ * $sql = "SELECT * from spms_corefunctions where parent_id='' and
  * mfo_periodId='$period_id' and dep_id='$dep_id' ORDER BY `spms_corefunctions`.`cf_count` ASC ";
- * 
+ *
  * */
 
 function getRows($period_id, $department_id)
@@ -431,7 +431,7 @@ function getAuthPersonnelDepartmentId($period_id)
 
     /**
      * department_id from spms_performancereviewstatus table
-     * if no spms_performancereviewstatus, 
+     * if no spms_performancereviewstatus,
      * current user employee's department_id from
      * employees table is used
      */

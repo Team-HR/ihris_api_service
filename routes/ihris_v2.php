@@ -12,4 +12,5 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/ihris_v2/mfo-periods/{mfoPeriodId}/departments/{departmentId}', [CoreFunctionController::class, 'getCoreFunctions']);
+
 Route::get('/ihris_v2/users/{userId}/success-indicators', [SuccessIndicatorController::class, 'getUserSuccessIndicators']);

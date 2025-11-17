@@ -18,7 +18,9 @@ class SuccessIndicatorUser extends Model
 
     public function user()
     {
-        // manually set connection because the user table is in another database
-        return $this->belongsTo(User::class, 'user_id', 'acc_id')->setConnection('mariadb');
+        // This relationship connects to the 'mariadb' connection via the User model
+        // The User model has protected $connection = 'mariadb' set
+        return $this->hasOne (User::class, 'user_id', 'acc_id');
     }
+
 }

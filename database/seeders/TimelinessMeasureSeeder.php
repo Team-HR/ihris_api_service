@@ -32,7 +32,7 @@ class TimelinessMeasureSeeder extends Seeder
 
             foreach ($timelinessData as $index => $value) {
                 if (!empty($value)) {
-                    TimelinessMeasure::updateOrCreate(
+                    TimelinessMeasure::firstOrCreate(
                         [
                             'success_indicator_id' => $indicator->id,
                             'score' => $index, // uniquely identify by indicator + score

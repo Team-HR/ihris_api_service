@@ -18,7 +18,7 @@ class CoreFunctionSeeder extends Seeder
     {
         $CoreFns = SpmsCoreFunction::all();
 
-        
+
         foreach ($CoreFns as $function) {
             // Skip if department doesn't exist
             if (! Department::find($function->dep_id)) continue;
@@ -27,7 +27,7 @@ class CoreFunctionSeeder extends Seeder
             $mfoPeriodId = (int) $function->mfo_periodId;
             if ($mfoPeriodId <= 0 || ! MfoPeriod::find($mfoPeriodId)) continue;
 
-            CoreFunction::updateOrCreate(
+            CoreFunction::firstOrCreate(
                 ['id' => $function->cf_ID],
                 [
                     'mfo_period_id' => $mfoPeriodId,
@@ -38,7 +38,6 @@ class CoreFunctionSeeder extends Seeder
                 ]
             );
         }
-
 
         // Update parent_id only if the parent exists
         foreach ($CoreFns as $function) {

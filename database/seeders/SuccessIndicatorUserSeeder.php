@@ -23,7 +23,7 @@ class SuccessIndicatorUserSeeder extends Seeder
             $userIds = array_filter(explode(',', $indicatorOldRecord->mi_incharge));
             
             foreach($userIds as $id){
-                SuccessIndicatorUser::updateOrCreate([
+                SuccessIndicatorUser::firstOrCreate([
                     'success_indicator_id' => $indicator->id,
                     'user_id' => $id
                 ],[]);

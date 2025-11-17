@@ -23,7 +23,7 @@ class SuccessIndicatorSeeder extends Seeder
                 continue; // skip invalid references
             }
             
-            SuccessIndicator::updateOrCreate(
+            SuccessIndicator::firstOrCreate(
             ['id' => $indicator->mi_id],
             [
                 'core_function_id' => $indicator->cf_ID,

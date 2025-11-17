@@ -22,7 +22,7 @@ class DepartmentSeeder extends Seeder
             [
                 'parent_id' => $dept->parent_department_id,
                 'name' => $dept->department,
-                'alias' => $dept->alias,
+                'alias' => $dept->alias ?? '',
             ]);
         }
     }

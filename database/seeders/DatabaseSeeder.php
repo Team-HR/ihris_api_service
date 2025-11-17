@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SuccessIndicatorUserSeeder::class);
         $this->call(QualityMeasureSeeder::class);
         $this->call(EfficiencyMeasureSeeder::class);
-        $this->call(TimelinessMeasure::class);
+        $this->call(TimelinessMeasureSeeder::class);
     }
 }

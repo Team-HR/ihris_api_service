@@ -12,10 +12,13 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+    use HasFactory, Notifiable;
+
     protected $connection = 'mariadb';
     // mariadb
-    // use HasApiTokens, 
-    use HasFactory, Notifiable;
+    // use HasApiTokens,
+
 
     /**
      * The table associated with the model.
@@ -98,7 +101,7 @@ class User extends Authenticatable
             'user_id',
             'success_indicator_id'
         )->withTimestamps()
-        ->setConnection('ihris_v2'); 
+        ->setConnection('ihris_v2');
     }
 
 }

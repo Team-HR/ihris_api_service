@@ -16,7 +16,7 @@ class PcrController extends Controller
     }
 
     public function getStrategic($period_id, $employeesId) {
-        $strat = SpmsStrategicFunction::where('period_id', $period_id)->where('emp_id', $employeesId)->first();      
+        $strat = SpmsStrategicFunction::where('period_id', $period_id)->where('emp_id', $employeesId)->first();
         return [$period_id, $employeesId, $strat];
     }
 
@@ -102,7 +102,7 @@ class PcrController extends Controller
         $pcr = SpmsPerformanceReviewStatus::where('period_id', $period_id)->where('employees_id', $employee_id)->first();
         // get spms_performancestatus id if existing using (period_id and employees_id )
 
-        // if none create new 
+        // if none create new
         $coreFunctions = new RatingScaleMatrixController();
         $rsm =  $coreFunctions->getRatingScaleMatrix($period_id);
 

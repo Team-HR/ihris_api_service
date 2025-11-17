@@ -17,15 +17,15 @@ class CoreFunctionUserSeeder extends Seeder
                 array_map('trim', explode(',', $indicator->mi_incharge))
             );
 
-            foreach ($userIds as $id) {
-                CoreFunctionUser::updateOrCreate(
-                    [
-                        'user_id' => $id,
-                        'core_function_id' => $indicator->cf_ID,
-                    ],
-                    [] // nothing else to update
-                );
-            }
+            // foreach ($userIds as $id) {
+            //     CoreFunctionUser::firstOrCreate(
+            //         [
+            //             'user_id' => $id,
+            //             'core_function_id' => $indicator->cf_ID,
+            //         ],
+            //         [] // nothing else to update
+            //     );
+            // }
         }
     }
 }

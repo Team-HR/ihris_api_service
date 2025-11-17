@@ -31,7 +31,7 @@ class QualityMeasureSeeder extends Seeder
 
             foreach ($qualityData as $index => $value) {
                 if (!empty($value)) {
-                    QualityMeasure::updateOrCreate(
+                    QualityMeasure::firstOrCreate(
                         [
                             'success_indicator_id' => $indicator->id,
                             'score' => $index, // uniquely identify by indicator + score
