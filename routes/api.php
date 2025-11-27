@@ -17,13 +17,13 @@ Route::get('/user', function (Request $request) {
 
 
 /**
- * 
+ *
  * Generic APIs
- * 
+ *
  * */
 
 
-Route::get('/test', function(){
+Route::get('/test', function () {
     return __DIR__;
 });
 
@@ -34,9 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 /**
- * 
+ *
  * PMS
- * 
+ *
  * */
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -49,9 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     /**
-     * 
+     *
      * RSM
-     * 
+     *
      * */
 
     Route::get('/rsm/title/{period_id}', [RatingScaleMatrixController::class, 'getRatingScaleMatrixTitle']);
@@ -72,23 +72,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/si/{id}', [SuccessIndicatorController::class, 'getSuccessIndicator']);
 
     /**
-     * 
+     *
      * PCR
-     * 
+     *
      * */
 
     Route::get('/pcr/{period_id}', [PcrController::class, 'getPcr']);
-    // Route::get('/pcr/{period_id}/core', [PcrController::class, 'getCoreFunctions']);
-    Route::get('/pcr/{period_id}/core', [RatingScaleMatrixController::class, 'getIndividualRatingScaleMatrix']);
+    Route::get('/pcr/{period_id}/core', [PcrController::class, 'getCoreFunctions']);
+
+    Route::get('/pcr/{period_id}/strategic/{employeesId}', [PcrController::class, 'getStrategic']);
+    Route::post('/pcr/accomplishment/strategic', [PcrController::class, 'createStratAccomplishment']);
+    Route::delete('/pcr/accomplishment/strategic/{id}', [PcrController::class, 'deleteStratAccomplishment']);
+
+    Route::post('/pcr/accomplishment', [PcrController::class, 'createAccomplishment']);
+    Route::post('/pcr/na', [PcrController::class, 'createNaAccomplishment']);
+    Route::put('/pcr/accomplishment/{cf_id}', [PcrController::class, 'updateAccomplishment']);
+    Route::delete('/pcr/accomplishment/{cfd_id}', [PcrController::class, 'deleteAccomplishment']);
+    // Route::get('/pcr/{period_id}/core', [RatingScaleMatrixController::class, 'getIndividualRatingScaleMatrix']);
+
 
     Route::get('/pcr/{period_id}/pcr/getformtype', [PcrController::class, 'getFormType']);
     Route::post('/pcr/{period_id}/pcr/formtype', [PcrController::class, 'saveFormType']);
     Route::get('/pcr/{period_id}/pcr/getsignatories', [PcrController::class, 'getSignatories']);
     Route::post('/pcr/{period_id}/pcr/signatories', [PcrController::class, 'saveSignatories']);
-    
-    
-    Route::get('/pcr/{period_id}/strategic/{employeesId}', [PcrController::class, 'getStrategic']);
-    // 
+    //
 });
 
 
