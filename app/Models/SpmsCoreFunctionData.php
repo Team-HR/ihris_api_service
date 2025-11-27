@@ -34,9 +34,6 @@ class SpmsCoreFunctionData extends Model
 
     public function getAAttribute()
     {
-        // return 1;
-        return null;
-
         $average = null;
 
         $num = 0;
